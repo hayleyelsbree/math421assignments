@@ -36,7 +36,7 @@ knitr::opts_chunk$set(message = FALSE)
 | 3    | 42  | Ricky |
 
 ```{r}
-df = data.frame(Rank = c(0, 1, 2, 3), 
+df <- data.frame(Rank = c(0, 1, 2, 3), 
                 Age = c(28, 34, 29, 42), 
                 Name = c("Tom", "Jack", "Steve", "Ricky"))
 
@@ -46,14 +46,13 @@ df
 2.  Use `read.csv` to import the Covid19 Vaccination data from WHO: [link](https://bryantstats.github.io/math421/data/us-states.csv).
 
 ```{r}
-df = read.csv("https://bryantstats.github.io/math421/data/us-states.csv")
+df <- read.csv("https://bryantstats.github.io/math421/data/us-states.csv")
 head(df)
 ```
 
 3.  Show the names of the variables in the data
 
 ```{r}
-df = read.csv('https://bryantstats.github.io/math421/data/us-states.csv')
 names(df)
 ```
 
@@ -73,6 +72,7 @@ There are 5 columns and 51,078 rows in the data.
 sum(is.na(df))
 colSums(is.na(df))
 ```
+There are no missing values in any of the columns in this dataset.
 
 6.  What is the class of the `date` column. Change the `date` columns to `date` type using the `as.Date` function. Show the new class of the `date` column.
 
@@ -80,7 +80,7 @@ colSums(is.na(df))
 class(df$date)
 ```
 ```{r}
-df$date = as.Date(df$date)
+df$date <- as.Date(df$date)
 ```
 
 ```{r}
@@ -99,9 +99,21 @@ names(df)
 8.  Find the average number of cases per day. Find the maximum cases a day.
 
 ```{r}
-
+# Aggregate cases so one row is one date
+daily_cases <- aggregate(CASES ~ DATE, df, sum)
+head(daily_cases)
 ```
 
+
+```{r}
+# Average
+mean(daily_cases$CASES)
+```
+
+```{r}
+# Maximum
+max(daily_cases$CASES)
+```
 
 9.  How many states are there in the data?
 
@@ -129,7 +141,7 @@ head(df)
 
 ```{r}
 df$DEATH2 <- ifelse(df$DEATHS > 0, 'has_death', 'no_death')
-df
+head(df)
 ```
 
 
@@ -175,9 +187,9 @@ head(df)
 14. Find the average cases in Rhode Island in 2021
 
 ```{r}
-df_RI = df[df$STATE == 'Rhode Island',]
-df_RI_2021 = df_RI[df_RI$DATE >= '2021-01-01' & df_RI$DATE <= '2021-12-31',]
-df_RI_2021
+df_RI  <- df[df$STATE == 'Rhode Island',]
+df_RI_2021  <- df_RI[df_RI$DATE >= '2021-01-01' & df_RI$DATE <= '2021-12-31',]
+head(df_RI_2021)
 ```
 
 ```{r}
@@ -193,8 +205,20 @@ by(df_RI_2021$CASES, df_RI_2021$WEEKDAYS, median)
 16. Compare the median cases in Rhode Island in June, July, August and September in 2021.
 
 ```{r}
+df_RI_June_2021 <- df_RI[df_RI$DATE >= '2021-06-01' & df_RI$DATE <= '2021-06-30',]
+df_RI_July_2021 <- df_RI[df_RI$DATE >= '2021-07-01' & df_RI$DATE <= '2021-07-31',]
+df_RI_August_2021 <- df_RI[df_RI$DATE >= '2021-08-01' & df_RI$DATE <= '2021-08-31',]
+df_RI_September_2021 <- df_RI[df_RI$DATE >= '2021-09-01' & df_RI$DATE <= '2021-09-30',]
+```
+
+```{r}
+median(df_RI_June_2021$CASES)
+median(df_RI_July_2021$CASES)
+median(df_RI_August_2021$CASES)
+median(df_RI_September_2021$CASES)
 
 ```
+In this comparison, June has the lowest median cases and September has the highest median cases in 2021.
 
 
 17. Find your own dataset, import it and implement the following functions on the data
@@ -212,9 +236,113 @@ by(df_RI_2021$CASES, df_RI_2021$WEEKDAYS, median)
 - ifelse
 - case_when
 
+```{r}
+df1 = read.csv("https://bryantstats.github.io/math421/data/titanic.csv")
+```
+
+```{r}
+# head
+head(df1)
+```
+
+```{r}
+#str
+str(df1)
+```
+```{r}
+# names
+names(df1)
+```
+```{r}
+# mean, min, max
+mean(df1$Age, na.rm = TRUE)
+min(df1$Age, na.rm = TRUE)
+max(df1$Age, na.rm = TRUE)
+```
+```{r}
+# table
+table(df1$Sex)
+```
+```{r}
+# is.na, colSums
+sum(is.na(df1))
+colSums(is.na(df1))
+```
+```{r}
+# class
+class(df1$Fare)
+```
+
+```{r}
+# cor
+cor(df1$Fare, df1$Survived)
+```
+
+
+```{r}
+# by
+
+# % of people who survived by class
+by(df1$Survived, df1$Pclass, mean)
+```
+
+
+```{r}
+# ifelse
+df1$traveled_alone <- ifelse(df1$SibSp == 0, 'Yes', 'No')
+head(df1)
+
+```
+
+
+```{r}
+# case_when
+
+library(dplyr)
+
+
+df1$age_bins <- case_when(df1$Age < 18 ~ 'Child',
+                       df1$Age <= 65 ~ 'Adult',
+                       is.na(df1$Age) ~ 'Unknown',
+                       TRUE ~ 'Elderly')
+
+head(df1)
+```
+
+
 18. In the dataset in #17, practice the follows. You can reuse the code of 17.
 
 - Create a categorical variable from a continuous variable
 - From one categorical variable, create a new categorical variable with fewer categories
+
+```{r}
+summary(df1$Fare)
+```
+
+
+```{r}
+# Create categorical variable from a continuous variable
+library(dplyr)
+
+Q1 <- 7.91
+Q3 <- 31
+
+df1$fare_bins <- case_when(df1$Fare < Q1 ~ 'Low',
+                       df1$Fare <= Q3 ~ 'Medium',
+                       TRUE ~ 'High')
+
+head(df1)
+```
+
+
+```{r}
+# From one categorical variable, create a new categorical variable with fewer categories
+
+df1$FirstClass <- ifelse(df1$Pclass == 1, 'Yes', 'No') 
+
+head(df1)
+
+```
+
 
 If you do not have a data, you can use [the titanic dataset](https://www.kaggle.com/competitions/titanic/overview), which can be downloaded at [this link](https://bryantstats.github.io/math421/data/titanic.csv)
