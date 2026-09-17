@@ -47,7 +47,7 @@ df
 
 ```{r}
 df = read.csv("https://bryantstats.github.io/math421/data/us-states.csv")
-df
+head(df)
 ```
 
 3.  Show the names of the variables in the data
@@ -63,7 +63,9 @@ names(df)
 str(df)
 ```
 
-There are 5 colums and 51,078 rows in the data.
+There are 5 columns and 51,078 rows in the data.
+
+
 
 5.  How many missing values are there? Show the missing values by columns. What variable has the most number of missing values?
 
@@ -74,28 +76,79 @@ colSums(is.na(df))
 
 6.  What is the class of the `date` column. Change the `date` columns to `date` type using the `as.Date` function. Show the new class of the `date` column.
 
-The `date` column is chr.
+```{r}
+class(df$date)
+```
+```{r}
+df$date = as.Date(df$date)
+```
+
+```{r}
+class(df$date)
+```
+
+
+7.  Capitalize the names of all the variables
+
+```{r}
+names(df) <- toupper(names(df))
+names(df)
+```
+
+
+8.  Find the average number of cases per day. Find the maximum cases a day.
 
 ```{r}
 
 ```
 
-7.  Capitalize the names of all the variables
-
-8.  Find the average number of cases per day. Find the maximum cases a day.
 
 9.  How many states are there in the data?
 
+```{r}
+unique(df$STATE)
+```
+```{r}
+length(unique(df$STATE))
+```
+There are 56 states in the data.
+
+
 10. Create a new variable `weekdays` to store the weekday for each rows.
+
+```{r}
+df$WEEKDAYS <- weekdays(df$DATE)
+head(df)
+```
+
 
 11. Create the categorical variable `death2` variable taking the values as follows
 
 - `has_death` if there is a death that day
 - `no_death` if there is no death that day
 
+```{r}
+df$DEATH2 <- ifelse(df$DEATHS > 0, 'has_death', 'no_death')
+df
+```
+
+
 Find the frequency and relative frequency of `no_death` and `has_death`.
 
+```{r}
+# Frequency
+table(df$DEATH2)
+```
+```{r}
+# Relative Frequency
+prop.table(table(df$DEATH2))
+```
+
 12. Find the first quartile (Q1), second quartile (Q2) and and third quartile (Q3) of the variable `death`. (Hint: Use the `summary` function)
+
+```{r}
+summary(df$DEATHS)
+```
 
 13. Create the categorical variable `death3` variable taking the values as follows
 
@@ -105,11 +158,44 @@ Find the frequency and relative frequency of `no_death` and `has_death`.
 
 - `high_death` if the number of deaths greater than Q3
 
+```{r}
+library(dplyr)
+
+Q1 <- 838
+Q3 <- 12674
+
+df$DEATH3 <- case_when(df$DEATHS < Q1 ~ 'low_death',
+                       df$DEATHS <= Q3 ~ 'mid_death',
+                       TRUE ~ 'high_death')
+
+head(df)
+```
+
+
 14. Find the average cases in Rhode Island in 2021
+
+```{r}
+df_RI = df[df$STATE == 'Rhode Island',]
+df_RI_2021 = df_RI[df_RI$DATE >= '2021-01-01' & df_RI$DATE <= '2021-12-31',]
+df_RI_2021
+```
+
+```{r}
+mean(df_RI_2021$CASES)
+```
 
 15. Find the median cases by weekdays in Rhode Island in 2021
 
+```{r}
+by(df_RI_2021$CASES, df_RI_2021$WEEKDAYS, median)
+```
+
 16. Compare the median cases in Rhode Island in June, July, August and September in 2021.
+
+```{r}
+
+```
+
 
 17. Find your own dataset, import it and implement the following functions on the data
 
