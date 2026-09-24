@@ -53,10 +53,12 @@ df
 
 ```{r}
 library(lubridate)
-df$month = month(df$date)
+
+# month
+df$month = month(df$date, label = TRUE, abbr = FALSE)
 
 # day of the week
-df$weekday = wday(df$date)
+df$weekday = wday(df$date, label = TRUE, abbr = FALSE)
 
 # day of the month
 df$monthday <- mday(df$date)
@@ -92,9 +94,9 @@ df
 - Create variable `weekend` that takes two values: 1 if it's Saturday or Sunday and 0 otherwise.
 
 ```{r}
-df$weekend <- case_when((df$monthday == 1) | (df$monthday == 7) ~ 1,
+df$weekend <- case_when((df$weekday == "Saturday") | (df$weekday == "Sunday") ~ 1,
                         TRUE ~ 0)
-head(df)
+df
 ```
 
 ------------------------------------------------------------------------
@@ -191,17 +193,75 @@ df %>%
 
 - Calculate the median number of cases (`positiveIncrease`) on the weekend by `month` in October and November 2020.
 
+```{r}
+df %>%
+  filter((month == "October" | month == "November") & year(date) == 2020 & weekend == 1) %>%
+  group_by(month) %>%
+  summarise(median(positiveIncrease))
+```
+
+
 - Calculate the average number of death at different periods of a month (`month2` variable) in Fall 2020
+
+```{r}
+df %>%
+  drop_na(death) %>%
+  filter((month == "September" | month == "October" | month == "November") & year(date) == 2020) %>%
+  group_by(month2) %>%
+  summarise(mean(death))
+```
+
 
 - Compare the average number of hospitalizations between weekdays and weekends in Summer 2020
 
+```{r}
+df %>%
+  drop_na(hospitalized) %>%
+  filter((month == "June" | month == "July" | month == "August") & year(date) == 2020) %>%
+  group_by(weekend) %>%
+  summarise(mean(hospitalized))
+```
+
+
 - Redo Questions 14 and 15 in [Assignment 3](assignment3q.html) using the combos. Notice: you also need to use the data used in Assignment 3.
+
+```{r}
+df2 <- read_csv("https://bryantstats.github.io/math421/data/us-states.csv")
+```
+
+```{r}
+# Question 14: Find the average cases in Rhode Island in 2021
+df2 %>%
+  filter(state == "Rhode Island" & year(date) == 2021) %>%
+  summarise(mean(cases))
+```
+
+```{r}
+# Question 15: Find the median cases by weekdays in Rhode Island in 2021
+df2$weekdays <- weekdays(df2$date)
+
+df2 %>%
+  filter(state == "Rhode Island" & year(date) == 2021) %>%
+  group_by(weekdays) %>%
+  summarise(median(cases))
+```
+
 
 ------------------------------------------------------------------------
 
 #### 9. Combo 3: filter + group_by + summarise + arrange
 
 Use the arrange function to find a month that has the highest number of deaths on the weekend.
+
+```{r}
+df %>%
+  drop_na(death) %>%
+  filter(weekend == 1) %>%
+  group_by(month) %>%
+  summarise(average_deaths = mean(death)) %>%
+  arrange(-average_deaths)
+```
+
 
 ------------------------------------------------------------------------
 
@@ -220,3 +280,78 @@ You can use the [Adult Census Income](https://bryantstats.github.io/math421/data
 - group_by + summarise
 - filter + group_by + summarise
 - filter + group_by + summarise + arrange
+
+```{r}
+# Adult Census Income Data
+df3 <- read_csv("https://bryantstats.github.io/math421/data/adult_census.csv")
+df3
+```
+
+```{r}
+# select
+df3 |> select(-fnlwgt)
+```
+
+```{r}
+# filter
+df3 |> filter(sex == "Female")
+```
+
+```{r}
+# mutate
+df3 |> mutate(elderly = ifelse(age >= 65, "Elderly", "Not Elderly"))
+```
+
+```{r}
+# summarise
+df3 |> summarise(min(age), mean(age), median(age), max(age))
+```
+
+```{r}
+# arrange
+df3 |> arrange(education.num)
+```
+
+```{r}
+# count
+df3 |> count(occupation)
+```
+
+```{r}
+# count + arrange
+df3 |> 
+  count(education) |> 
+  arrange(-n)
+```
+
+```{r}
+# filter + count + arrange
+df3 |> 
+  filter(relationship == "Unmarried") |> 
+  count(race) |> 
+  arrange(-n)
+```
+
+```{r}
+# group_by + summarise
+df3 |> 
+  group_by(sex) |> 
+  summarise(mean(age), median(age), max(age))
+```
+
+```{r}
+# filter + group_by + summarise
+df3 |> 
+  filter(race == "White") |> 
+  group_by(income) |> 
+  summarise(min(hours.per.week), mean(hours.per.week), median(hours.per.week), max(hours.per.week))
+```
+
+```{r}
+# filter + group_by + summarise + arrange
+df3 |> 
+  filter(education == "Bachelors") |> 
+  group_by(native.country) |>  
+  summarise(mean_age = mean(age)) |> 
+  arrange(-mean_age)
+```
