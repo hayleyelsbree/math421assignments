@@ -26,8 +26,8 @@ knitr::opts_chunk$set(message = FALSE)
 
 An R package can be installed by `install.packages` function. Install `tidyverse` if you have not done so.
 
-```{r}
-# install.packages('tidyverse')
+```{r, eval=FALSE}
+install.packages('tidyverse')
 ```
 
 ------------------------------------------------------------------------
@@ -40,8 +40,8 @@ Use `read_csv` function to import the US Covid 19 data at [link](https://bryants
 library(tidyverse)
 
 df <- read_csv("https://bryantstats.github.io/math421/data/all-states-history.csv")
+df
 ```
-
 
 ------------------------------------------------------------------------
 
@@ -61,7 +61,7 @@ df$weekday = wday(df$date)
 # day of the month
 df$monthday <- mday(df$date)
 
-head(df)
+df
 ```
 
 ------------------------------------------------------------------------
@@ -89,7 +89,6 @@ df$month2 <- case_when(
 df
 ```
 
-
 - Create variable `weekend` that takes two values: 1 if it's Saturday or Sunday and 0 otherwise.
 
 ```{r}
@@ -107,7 +106,6 @@ Use the select function to deselect the column `totalTestsViral` from the data.
 ```{r}
 df |> select(-totalTestsViral)
 ```
-
 
 ------------------------------------------------------------------------
 
@@ -139,9 +137,8 @@ x |> sqrt() |> sum()
 
 x |> sqrt() |> sum() |> log()
 
-
+16 |> log2()
 ```
-
 
 ------------------------------------------------------------------------
 
@@ -163,7 +160,6 @@ df %>%
   summarise(median(positiveIncrease))
 ```
 
-
 - Calculate the average number of cases (`positiveIncrease`) by `month2`
 
 ```{r}
@@ -172,13 +168,13 @@ df %>%
   summarise(mean(positiveIncrease))
 ```
 
-
 - Calculate the median number of cases (`positiveIncrease`) by `weekend`
 
 ```{r}
-
+df %>%
+  group_by(weekend) %>%
+  summarize(median(positiveIncrease))
 ```
-
 
 ------------------------------------------------------------------------
 
