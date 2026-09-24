@@ -11,7 +11,7 @@
 
 
 
-<title>README</title>
+<title>Assignment 5 - Part 2</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -348,22 +348,79 @@ display: none;
 
 
 
+<h1 class="title toc-ignore">Assignment 5 - Part 2</h1>
 
 </div>
 
 
-<div id="math421assignments" class="section level1">
-<h1>math421assignments</h1>
-<p><a href="https://www.bryant.edu">Bryant University</a></p>
-<p><a href="assignment1.html">Assignment 1</a></p>
-<p><a href="assignment2q.html">Assignment 2</a></p>
-<p><a href="assignment3q.html">Assignment 3</a></p>
-<p><a href="assignment4q.html">Assignment 4</a></p>
-<p><a href="assignment4_extra_credits.html">Assignment 4 Extra
-Credit</a></p>
-<p><a href="assignment5_part1.html">Assignment 5</a></p>
-<p><a href="assignment5_part2.html">Assignment 5 Extra Credit</a></p>
-</div>
+<p><strong><em>How to do it?</em></strong>:</p>
+<ul>
+<li><p>Open the Rmarkdown file of this assignment (<a href="assignment5_part2.Rmd">link</a>) in Rstudio.</p></li>
+<li><p>Right under each <strong>question</strong>, insert a code chunk
+(you can use the hotkey <code>Ctrl + Alt + I</code> to add a code chunk)
+and code the solution for the question.</p></li>
+<li><p><code>Knit</code> the rmarkdown file (hotkey:
+<code>Ctrl + Alt + K</code>) to export an html.</p></li>
+<li><p>Publish the html file to your Githiub Page.</p></li>
+</ul>
+<p><strong><em>Submission</em></strong>: Submit the link on Github of
+the assignment to Canvas under Assignment 5 - Extra Credits.</p>
+<hr />
+<ol style="list-style-type: decimal">
+<li><p>Download the c2015 dataset to your computer at <a href="../data/c2015.xlsx">this link</a>. Load the library
+<code>readxl</code> (library(readxl)) then use the function
+<code>read_excel()</code> to read the c2015 dataset. The data is from
+Fatality Analysis Reporting System (FARS). The data includes vital
+accidents information, such as when, where, and how the accident
+happened. FARS also includes the drivers and passengers’ information,
+such as age,gender etc. Some of the fatal accident had multiple vehicles
+involved. More information about FARS can be found at: <a href="https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars" class="uri">https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars</a></p></li>
+<li><p>Let’s study the variable <code>SEX</code>. How many missing
+values in the NAs form?</p></li>
+<li><p>Still with variable <code>SEX</code>. There are missing values in
+this variables that are not <code>NAs</code>. Identify the forms of
+missing values in this variable. Change all the forms of missing values
+to <code>NAs</code>.</p></li>
+<li><p>Still with variable <code>SEX</code>. After all the missing
+values are in the <code>NAs</code> form. Change the missing values of
+this variable to the majority sex.</p></li>
+<li><p>Let’s study variable <code>AGE</code>. Use the <code>table</code>
+function to check out the values of these variable and forms of missing
+values. Use <code>na_if</code> to change all the forms of missing values
+to <code>NAs</code>.</p></li>
+<li><p>Still with variable <code>AGE</code>. Use the
+<code>str_replace</code> to replace <code>Less than 1</code> to ‘0’
+(character 0, not number 0).</p></li>
+<li><p>Still with variable <code>AGE</code>. Use the <code>class</code>
+function to check the type of this variable. Use the
+<code>as.numeric</code> function to change the type of the variable to
+numeric.</p></li>
+<li><p>Still with variable <code>AGE</code>. Replace the missing values
+<code>NAs</code> by the mean of the variable. `</p></li>
+<li><p>Let’s fix the variable <code>TRAV_SP</code>. Do the
+follows.</p></li>
+</ol>
+<ul>
+<li>Use the <code>table</code> function to check all the values of this
+variable. Use the <code>str_remove</code> to remove the <code>MPH</code>
+in each value.</li>
+<li>Remove the row with the travel speed <code>Greater</code></li>
+<li>Use the <code>str_replace</code> function to replace
+<code>Stopped</code> by ‘0’ (dont forget the quotation mark around
+0)</li>
+<li>Use <code>na_if</code> to change all the forms of missing values to
+<code>NAs</code></li>
+<li>Check the type of this variable using <code>class</code>. Use
+<code>as.numeric</code> to change the type to numeric.</li>
+<li>Use <code>replace_na</code> to replace the <code>NAs</code> to the
+median of the variable.</li>
+</ul>
+<ol start="10" style="list-style-type: decimal">
+<li>Find the correlation between Age of the drivers and Travel speed
+(<code>TRAV_SP</code>). Hint: You want to look at the seat positions
+(<code>SEAT_POS</code> variable) to filter out the observations about
+the drivers, then calculate the correlation.</li>
+</ol>
 
 
 
