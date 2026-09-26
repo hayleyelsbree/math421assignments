@@ -52,19 +52,156 @@ colSums(is.na(df))
 
 2. Using function `aggr` the VIM package to plot the number of NAs for each column. 
 
-3. Find other forms of missing values. Hint: You can use the `table` function to check if there are suspicious categories (Unknown, for example) in a variable. What all other forms of missing values shown in the data. 
+```{r}
+library(VIM)
+
+aggr(df)
+```
+
+
+3. Find other forms of missing values. Hint: You can use the `table` function to check if there are suspicious categories (Unknown, for example) in a variable. What all other forms of missing values shown in the data.
+
+```{r}
+table(df$age)
+```
+```{r}
+table(df$workclass)
+```
+```{r}
+table(df$education)
+```
+```{r}
+table(df$education.num)
+```
+
+```{r}
+table(df$marital.status)
+```
+
+```{r}
+table(df$occupation)
+```
+```{r}
+table(df$relationship)
+```
+```{r}
+table(df$race)
+```
+
+```{r}
+table(df$sex)
+```
+```{r}
+table(df$capital.gain)
+```
+```{r}
+table(df$capital.loss)
+```
+
+```{r}
+table(df$hours.per.week)
+```
+
+```{r}
+table(df$native.country)
+```
+
+```{r}
+table(df$income)
+```
+
+**The  other forms of NAs are ?, Unknown, and Not Known.**
+
 
 4. Replace all the forms of missing values found to NA
 
+```{r}
+df <- replace(df, df == 'Unknown' | 
+                  df == '?' | 
+                  df == 'Not Known', NA)
+```
+
+
 5. Replot the number of NAs for each column. 
+
+```{r}
+colSums(is.na(df))
+```
+
+
+```{r}
+aggr(df)
+```
+
 
 6. Approach 1 to handle NAs: remove all rows that have any NAs. Save the dataset after removing as a different data. The original data is unchanged (still have NAs).  How many rows left after removing?
 
+```{r}
+df1 <- drop_na(df)
+df1
+```
+
+```{r}
+colSums(is.na(df1))
+```
+**29,865 rows are left after removing the ones with NAs.**
+
 7. Approach 2 to handle NAs:  Fill all the NAs with the previous or next value. (Hint: Using `fill` function).  Save the dataset after filling as a different data. The original data is unchanged (still have NAs). 
+
+```{r}
+df2 <- df |> fill(age, workclass, education, marital.status, occupation, relationship, sex, capital.gain, native.country, .direction = 'updown')
+df2
+```
+
+```{r}
+colSums(is.na(df2))
+```
 
 8. Approach 3 to handle NAs: For numeric variable, replace the NAs by the median.  For categorical variables, replace the NAs to the majority. 
 
+```{r}
+# Get classes of each column
+sapply(df, class)
+```
 
 
+```{r}
+# Numeric
+median_age <- median(df$age, na.rm = TRUE)
+median_capital_gain <- median(df$capital.gain, na.rm = TRUE)
 
+
+# Categorical
+majority_workclass <- names(which.max(table(df$workclass)))
+majority_education <- names(which.max(table(df$education)))
+majority_marital_status <- names(which.max(table(df$marital.status)))
+majority_occupation <- names(which.max(table(df$occupation)))
+majority_relationship <- names(which.max(table(df$relationship)))
+majority_sex <- names(which.max(table(df$sex)))
+majority_native_country <- names(which.max(table(df$native.country)))
+
+```
+
+
+```{r}
+df3 <- df
+```
+
+```{r}
+df3$age <- replace_na(df3$age, median_age)
+df3$capital.gain <- replace_na(df3$age, median_capital_gain)
+df3$workclass <- replace_na(df3$age, majority_workclass)
+df3$education <- replace_na(df3$age, majority_education)
+df3$marital.status <- replace_na(df3$age, majority_marital_status)
+df3$occupation <- replace_na(df3$age, majority_occupation)
+df3$relationship <- replace_na(df3$age, majority_relationship)
+df3$sex <- replace_na(df3$age, majority_sex)
+df3$native.country <- replace_na(df3$age, majority_native_country)
+
+df3
+```
+
+```{r}
+colSums(is.na(df3))
+```
 
