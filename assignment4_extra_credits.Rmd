@@ -31,19 +31,115 @@ This assignment works with the [IMDB Top 1000 data](../data/imdb_top_1000.csv). 
 
 1. List all the names of the columns of the data
 
+```{r}
+library(tidyverse)
+df <- read_csv("C:\\Users\\student\\Downloads\\imdb_top_1000.csv")
+df
+```
+
+```{r}
+names(df)
+```
+
 2. Which movies have the highest money earned (Gross)?
+
+```{r}
+df |> arrange(-Gross)
+```
+
+**The top 5 movies with the highest money earned are Star Wars: Episode VII - The Force Awakens, Avengers: Endgame, Avatar, Avengers: Infinity War, and Titanic.**
 
 3. What is the lowest rating (IMDB_Rating)?  List five movies have this lowest rating.
 
+```{r}
+df |> arrange(IMDB_Rating)
+```
+
+**The lowest rating is 7.6. Five movies with this rating are Dark Waters, Searching, Once Upon a Time... in Hollywood, Nelyubov, and The Florida Project.**
+
 4. Which year have the most number of movies released in the list?  What is the total of money earned on that year?
+
+```{r}
+df |> 
+  group_by(Released_Year) |> 
+  summarise(count = n(), sum(Gross, na.rm = TRUE)) |> 
+  arrange(-count)
+```
+
+**2014 had the most movies released and grossed $2,755,629,221 in total.**
 
 5. What is the total money earned per movies on average?
 
+```{r}
+df |> summarise(avg_gross = mean(Gross, na.rm = TRUE))
+```
+
+**$68,034,751**
+
+
 6. Calculate the average number of votes by year. Calculate the average number of votes of movies that have IMDB rating greater than 9.
+
+```{r}
+# Average number of votes by year
+df |> 
+  group_by(Released_Year) |> 
+  summarise(mean(No_of_Votes))
+```
+
+```{r}
+# Average number of votes of movies that have IMDB rating greater than 9
+df |> 
+  filter(IMDB_Rating > 9) |> 
+  summarise(mean(No_of_Votes))
+```
+
 
 7. Calculate the average Meta score in 2020 of movies that have number of votes in the third quartile. 
 
+```{r}
+summary(df$No_of_Votes)
+```
+
+
+```{r}
+Q2 <- 138549
+Q3 <- 374161
+
+df |> 
+  filter(Released_Year == 2020 & No_of_Votes >= Q2 & No_of_Votes <= Q3) |> 
+  summarise(avg_meta_score = mean(Meta_score, na.rm = TRUE))
+```
+
+
 8. (Optional - Challenging). The current `Runtime` variable is not a numeric. Use the `str_remove` function to remove ` min` from the variables then use `as.numeric` to convert the variable to numeric. Calculate the average running time in the 2010s. Calculate the correlation between running time and rating (adding `use="complete.obs"` in the `cor` function to ignore the missing values).  
+
+```{r}
+table(df$Runtime)
+```
+
+```{r}
+# Remove `min`
+df <- df |> mutate(Runtime = str_remove_all(Runtime, ' min'))
+table(df$Runtime)
+```
+
+```{r}
+# Convert to numeric
+df$Runtime <- as.numeric(df$Runtime)
+class(df$Runtime)
+```
+
+```{r}
+# Average running time in the 2010s
+df |> 
+  filter(Released_Year >= 2010 & Released_Year < 2020) |> 
+  summarise(mean(Runtime))
+```
+
+```{r}
+# Correlation between running time and IMDB rating
+cor(df$Runtime, df$IMDB_Rating, use="complete.obs")
+```
 
 9. We can use `select_if` to select columns satisfying a condition and use `summarise_if` to do calculation on columns satisfying a condition.  Try the follows to understand these functions. 
 
@@ -69,3 +165,104 @@ df %>% summarise_if(is.numeric, mean, na.rm=TRUE)
 - group_by + summarise
 - filter + group_by + summarise
 - filter + group_by + summarise + arrange
+
+```{r}
+# select: deselect the `Poster_Link` column
+df |> select(-Poster_Link)
+```
+
+**Deselecting this column makes the dataframe look less cluttered.**
+
+```{r}
+# filter: filter the dataframe to only rated R movies
+df |> filter(Certificate == 'R')
+```
+
+**There are only 146 movies that are rated R.**
+
+```{r}
+# mutate: make an indicator column for whether the movie was released in the 2000s or not
+df <- df |> mutate(Movie_2000s = ifelse(Released_Year >= 2000, 'Y', 'N'))
+```
+
+
+```{r}
+table(df$Movie_2000s)
+```
+
+**Most movies were released before the 2000's, but only by 28 movies.**
+
+```{r}
+# summarise: find the max runtime of a movie.
+df |> 
+  summarise(max(Runtime))
+```
+
+**The maximum runtime of a movie is 321 minutes.**
+
+```{r}
+# arrange: what is the highest metascore a movie can have? What are 5 movies with this score?
+df |> arrange(-Meta_score)
+```
+
+**The highest Meta score is 100. Five movies with this score are The Godfather, Casablanca, Rear Window, Lawrence of Arabia, and Vertigo.**
+
+```{r}
+# count: who are the directors of the movies? Who are the first 3 in alphabetical order?
+df |> count(Director)
+
+```
+
+**Aamir Khan, Aaron Sorkin, and Abdellatif Kechiche**
+
+```{r}
+# count + arrange: which director directed the most movies?
+df |> 
+  count(Director) |> 
+  arrange(-n)
+
+```
+
+**Alfred Hitchcock directed the most movies.**
+
+```{r}
+# filter + count + arrange: in what year did Leonardo DiCaprio star in the most movies?
+df |> 
+  filter(Star1 == "Leonardo DiCaprio" | Star2 == "Leonardo DiCaprio" | Star3 == "Leonardo DiCaprio" | Star4 == "Leonardo DiCaprio") |>
+  count(Released_Year) |> 
+  arrange(-n)
+```
+
+**Leonardo DiCaprio starred in the most movies in 2006 in 2010 releases.**
+
+```{r}
+# group_by + summarise: What is the average IMDB rating of movies per year? List the first 3 release years and the average rating.
+df |> 
+  group_by(Released_Year) |> 
+  summarise(avg_IMDB_rating = mean(IMDB_Rating, na.rm = TRUE))
+```
+
+**1920: 8.1, 1921: 8.3, 1922: 7.9**
+
+```{r}
+# filter + group_by + summarise: of the movies Tom Hanks stars in, what is the average IMDB rating by director? Name the last 3 alphabetically.
+df |> 
+  filter(Star1 == "Tom Hanks" | Star2 == "Tom Hanks" | Star3 == "Tom Hanks" | Star4 == "Tom Hanks") |> 
+  group_by(Director) |> 
+  summarise(mean(IMDB_Rating, na.rm = TRUE))
+
+```
+
+**Ron Howard: 7.6, Sam Mendes: 7.7, Steven Spielberg: 8.1**
+
+
+```{r}
+# filter + group_by + summarise + arrange: of the movies that are only in the comedy genre, what certificate has the highest average Meta score? 
+df |> 
+  filter(Genre == 'Comedy') |> 
+  group_by(Certificate) |> 
+  summarise(avg_meta_score = mean(Meta_score, na.rm = TRUE)) |> 
+  arrange(-avg_meta_score)
+```
+
+**PG has the highest average meta score at 93.**

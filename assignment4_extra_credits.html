@@ -372,29 +372,249 @@ the assignment to Canvas.</p>
 information about this data at <a href="https://www.kaggle.com/datasets/harshitshankhdhar/imdb-dataset-of-top-1000-movies-and-tv-shows">this
 link</a>. Import the data and answer the following questions.</p>
 <ol style="list-style-type: decimal">
-<li><p>List all the names of the columns of the data</p></li>
-<li><p>Which movies have the highest money earned (Gross)?</p></li>
-<li><p>What is the lowest rating (IMDB_Rating)? List five movies have
-this lowest rating.</p></li>
-<li><p>Which year have the most number of movies released in the list?
-What is the total of money earned on that year?</p></li>
-<li><p>What is the total money earned per movies on average?</p></li>
-<li><p>Calculate the average number of votes by year. Calculate the
-average number of votes of movies that have IMDB rating greater than
-9.</p></li>
-<li><p>Calculate the average Meta score in 2020 of movies that have
-number of votes in the third quartile.</p></li>
-<li><p>(Optional - Challenging). The current <code>Runtime</code>
-variable is not a numeric. Use the <code>str_remove</code> function to
-remove <code>min</code> from the variables then use
-<code>as.numeric</code> to convert the variable to numeric. Calculate
-the average running time in the 2010s. Calculate the correlation between
-running time and rating (adding <code>use=&quot;complete.obs&quot;</code> in the
-<code>cor</code> function to ignore the missing values).</p></li>
-<li><p>We can use <code>select_if</code> to select columns satisfying a
+<li>List all the names of the columns of the data</li>
+</ol>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Warning: package &#39;tibble&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Warning: package &#39;purrr&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Warning: package &#39;stringr&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Warning: package &#39;forcats&#39; was built under R version 4.4.3</code></pre>
+<pre><code>## Warning: package &#39;lubridate&#39; was built under R version 4.4.3</code></pre>
+<pre class="r"><code>df &lt;- read_csv(&quot;C:\\Users\\student\\Downloads\\imdb_top_1000.csv&quot;)
+df</code></pre>
+<pre><code>## # A tibble: 1,000 × 16
+##    Poster_Link  Series_Title Released_Year Certificate Runtime Genre IMDB_Rating
+##    &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;
+##  1 https://m.m… The Shawsha… 1994          A           142 min Drama         9.3
+##  2 https://m.m… The Godfath… 1972          A           175 min Crim…         9.2
+##  3 https://m.m… The Dark Kn… 2008          UA          152 min Acti…         9  
+##  4 https://m.m… The Godfath… 1974          A           202 min Crim…         9  
+##  5 https://m.m… 12 Angry Men 1957          U           96 min  Crim…         9  
+##  6 https://m.m… The Lord of… 2003          U           201 min Acti…         8.9
+##  7 https://m.m… Pulp Fiction 1994          A           154 min Crim…         8.9
+##  8 https://m.m… Schindler&#39;s… 1993          A           195 min Biog…         8.9
+##  9 https://m.m… Inception    2010          UA          148 min Acti…         8.8
+## 10 https://m.m… Fight Club   1999          A           139 min Drama         8.8
+## # ℹ 990 more rows
+## # ℹ 9 more variables: Overview &lt;chr&gt;, Meta_score &lt;dbl&gt;, Director &lt;chr&gt;,
+## #   Star1 &lt;chr&gt;, Star2 &lt;chr&gt;, Star3 &lt;chr&gt;, Star4 &lt;chr&gt;, No_of_Votes &lt;dbl&gt;,
+## #   Gross &lt;dbl&gt;</code></pre>
+<pre class="r"><code>names(df)</code></pre>
+<pre><code>##  [1] &quot;Poster_Link&quot;   &quot;Series_Title&quot;  &quot;Released_Year&quot; &quot;Certificate&quot;  
+##  [5] &quot;Runtime&quot;       &quot;Genre&quot;         &quot;IMDB_Rating&quot;   &quot;Overview&quot;     
+##  [9] &quot;Meta_score&quot;    &quot;Director&quot;      &quot;Star1&quot;         &quot;Star2&quot;        
+## [13] &quot;Star3&quot;         &quot;Star4&quot;         &quot;No_of_Votes&quot;   &quot;Gross&quot;</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Which movies have the highest money earned (Gross)?</li>
+</ol>
+<pre class="r"><code>df |&gt; arrange(-Gross)</code></pre>
+<pre><code>## # A tibble: 1,000 × 16
+##    Poster_Link  Series_Title Released_Year Certificate Runtime Genre IMDB_Rating
+##    &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;
+##  1 https://m.m… Star Wars: … 2015          U           138 min Acti…         7.9
+##  2 https://m.m… Avengers: E… 2019          UA          181 min Acti…         8.4
+##  3 https://m.m… Avatar       2009          UA          162 min Acti…         7.8
+##  4 https://m.m… Avengers: I… 2018          UA          149 min Acti…         8.4
+##  5 https://m.m… Titanic      1997          UA          194 min Dram…         7.8
+##  6 https://m.m… The Avengers 2012          UA          143 min Acti…         8  
+##  7 https://m.m… Incredibles… 2018          UA          118 min Anim…         7.6
+##  8 https://m.m… The Dark Kn… 2008          UA          152 min Acti…         9  
+##  9 https://m.m… Rogue One    2016          UA          133 min Acti…         7.8
+## 10 https://m.m… The Dark Kn… 2012          UA          164 min Acti…         8.4
+## # ℹ 990 more rows
+## # ℹ 9 more variables: Overview &lt;chr&gt;, Meta_score &lt;dbl&gt;, Director &lt;chr&gt;,
+## #   Star1 &lt;chr&gt;, Star2 &lt;chr&gt;, Star3 &lt;chr&gt;, Star4 &lt;chr&gt;, No_of_Votes &lt;dbl&gt;,
+## #   Gross &lt;dbl&gt;</code></pre>
+<p><strong>The top 5 movies with the highest money earned are Star Wars:
+Episode VII - The Force Awakens, Avengers: Endgame, Avatar, Avengers:
+Infinity War, and Titanic.</strong></p>
+<ol start="3" style="list-style-type: decimal">
+<li>What is the lowest rating (IMDB_Rating)? List five movies have this
+lowest rating.</li>
+</ol>
+<pre class="r"><code>df |&gt; arrange(IMDB_Rating)</code></pre>
+<pre><code>## # A tibble: 1,000 × 16
+##    Poster_Link  Series_Title Released_Year Certificate Runtime Genre IMDB_Rating
+##    &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;
+##  1 https://m.m… Dark Waters  2019          PG-13       126 min Biog…         7.6
+##  2 https://m.m… Searching    2018          U/A         102 min Dram…         7.6
+##  3 https://m.m… Once Upon a… 2019          A           161 min Come…         7.6
+##  4 https://m.m… Nelyubov     2017          R           127 min Drama         7.6
+##  5 https://m.m… The Florida… 2017          A           111 min Drama         7.6
+##  6 https://m.m… Just Mercy   2019          A           137 min Biog…         7.6
+##  7 https://m.m… Gifted       2017          PG-13       101 min Drama         7.6
+##  8 https://m.m… The Peanut … 2019          PG-13       97 min  Adve…         7.6
+##  9 https://m.m… Victoria     2015          &lt;NA&gt;        138 min Crim…         7.6
+## 10 https://m.m… Mustang      2015          PG-13       97 min  Drama         7.6
+## # ℹ 990 more rows
+## # ℹ 9 more variables: Overview &lt;chr&gt;, Meta_score &lt;dbl&gt;, Director &lt;chr&gt;,
+## #   Star1 &lt;chr&gt;, Star2 &lt;chr&gt;, Star3 &lt;chr&gt;, Star4 &lt;chr&gt;, No_of_Votes &lt;dbl&gt;,
+## #   Gross &lt;dbl&gt;</code></pre>
+<p><strong>The lowest rating is 7.6. Five movies with this rating are
+Dark Waters, Searching, Once Upon a Time… in Hollywood, Nelyubov, and
+The Florida Project.</strong></p>
+<ol start="4" style="list-style-type: decimal">
+<li>Which year have the most number of movies released in the list? What
+is the total of money earned on that year?</li>
+</ol>
+<pre class="r"><code>df |&gt; 
+  group_by(Released_Year) |&gt; 
+  summarise(count = n(), sum(Gross, na.rm = TRUE)) |&gt; 
+  arrange(-count)</code></pre>
+<pre><code>## # A tibble: 100 × 3
+##    Released_Year count `sum(Gross, na.rm = TRUE)`
+##    &lt;chr&gt;         &lt;int&gt;                      &lt;dbl&gt;
+##  1 2014             32                 2755629221
+##  2 2004             31                 1446650533
+##  3 2009             29                 2937170585
+##  4 2013             28                 1285357197
+##  5 2016             28                 2595557425
+##  6 2001             27                 2097818918
+##  7 2006             26                 1199286363
+##  8 2007             26                  979398029
+##  9 2015             25                 2462336868
+## 10 2012             24                 2542616037
+## # ℹ 90 more rows</code></pre>
+<p><strong>2014 had the most movies released and grossed $2,755,629,221
+in total.</strong></p>
+<ol start="5" style="list-style-type: decimal">
+<li>What is the total money earned per movies on average?</li>
+</ol>
+<pre class="r"><code>df |&gt; summarise(avg_gross = mean(Gross, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   avg_gross
+##       &lt;dbl&gt;
+## 1 68034751.</code></pre>
+<p><strong>$68,034,751</strong></p>
+<ol start="6" style="list-style-type: decimal">
+<li>Calculate the average number of votes by year. Calculate the average
+number of votes of movies that have IMDB rating greater than 9.</li>
+</ol>
+<pre class="r"><code># Average number of votes by year
+df |&gt; 
+  group_by(Released_Year) |&gt; 
+  summarise(mean(No_of_Votes))</code></pre>
+<pre><code>## # A tibble: 100 × 2
+##    Released_Year `mean(No_of_Votes)`
+##    &lt;chr&gt;                       &lt;dbl&gt;
+##  1 1920                       57428 
+##  2 1921                      113314 
+##  3 1922                       88794 
+##  4 1924                       41985 
+##  5 1925                       77054.
+##  6 1926                       81156 
+##  7 1927                      103428.
+##  8 1928                       38940.
+##  9 1930                       57318 
+## 10 1931                      125538 
+## # ℹ 90 more rows</code></pre>
+<pre class="r"><code># Average number of votes of movies that have IMDB rating greater than 9
+df |&gt; 
+  filter(IMDB_Rating &gt; 9) |&gt; 
+  summarise(mean(No_of_Votes))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   `mean(No_of_Votes)`
+##                 &lt;dbl&gt;
+## 1            1981738.</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>Calculate the average Meta score in 2020 of movies that have number
+of votes in the third quartile.</li>
+</ol>
+<pre class="r"><code>summary(df$No_of_Votes)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   25088   55526  138549  273693  374161 2343110</code></pre>
+<pre class="r"><code>Q2 &lt;- 138549
+Q3 &lt;- 374161
+
+df |&gt; 
+  filter(Released_Year == 2020 &amp; No_of_Votes &gt;= Q2 &amp; No_of_Votes &lt;= Q3) |&gt; 
+  summarise(avg_meta_score = mean(Meta_score, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   avg_meta_score
+##            &lt;dbl&gt;
+## 1             83</code></pre>
+<ol start="8" style="list-style-type: decimal">
+<li>(Optional - Challenging). The current <code>Runtime</code> variable
+is not a numeric. Use the <code>str_remove</code> function to remove
+<code>min</code> from the variables then use <code>as.numeric</code> to
+convert the variable to numeric. Calculate the average running time in
+the 2010s. Calculate the correlation between running time and rating
+(adding <code>use=&quot;complete.obs&quot;</code> in the <code>cor</code> function
+to ignore the missing values).</li>
+</ol>
+<pre class="r"><code>table(df$Runtime)</code></pre>
+<pre><code>## 
+## 100 min 101 min 102 min 103 min 104 min 105 min 106 min 107 min 108 min 109 min 
+##      23      22      18      14      15      16      15      16      19      11 
+## 110 min 111 min 112 min 113 min 114 min 115 min 116 min 117 min 118 min 119 min 
+##      20      10      15      22      11      13      12      16      17      16 
+## 120 min 121 min 122 min 123 min 124 min 125 min 126 min 127 min 128 min 129 min 
+##      17      15      20      11      13      12      15      16      12      22 
+## 130 min 131 min 132 min 133 min 134 min 135 min 136 min 137 min 138 min 139 min 
+##      23       9      13      10      14       9      11      12      15       8 
+## 140 min 141 min 142 min 143 min 144 min 145 min 146 min 147 min 148 min 149 min 
+##       7       7       6       9      12       5       7       7       3       4 
+## 150 min 151 min 152 min 153 min 154 min 155 min 156 min 157 min 158 min 159 min 
+##       3       3       6       8       5       5       6       6       4       4 
+## 160 min 161 min 162 min 163 min 164 min 165 min 166 min 167 min 168 min 169 min 
+##       5       6       5       3       2       5       1       3       1       4 
+## 170 min 171 min 172 min 174 min 175 min 177 min 178 min 179 min 180 min 181 min 
+##       7       1       3       1       1       1       5       2       4       3 
+## 183 min 184 min 185 min 186 min 188 min 189 min 191 min 192 min 193 min 194 min 
+##       2       1       1       2       3       3       1       1       1       1 
+## 195 min 196 min 197 min 201 min 202 min 204 min 205 min 207 min 209 min 210 min 
+##       1       1       2       2       2       1       1       1       1       1 
+## 212 min 220 min 224 min 228 min 229 min 238 min 242 min 321 min  45 min  64 min 
+##       1       1       1       1       1       1       1       1       1       1 
+##  67 min  68 min  69 min  70 min  71 min  72 min  75 min  76 min  78 min  79 min 
+##       1       1       1       1       2       2       2       3       1       1 
+##  80 min  81 min  82 min  83 min  84 min  85 min  86 min  87 min  88 min  89 min 
+##       6       4       2       2       3       5       6       8       8       7 
+##  90 min  91 min  92 min  93 min  94 min  95 min  96 min  97 min  98 min  99 min 
+##      10       9       9      11      14      13      17       9      11      14</code></pre>
+<pre class="r"><code># Remove `min`
+df &lt;- df |&gt; mutate(Runtime = str_remove_all(Runtime, &#39; min&#39;))
+table(df$Runtime)</code></pre>
+<pre><code>## 
+## 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 
+##  23  22  18  14  15  16  15  16  19  11  20  10  15  22  11  13  12  16  17  16 
+## 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 
+##  17  15  20  11  13  12  15  16  12  22  23   9  13  10  14   9  11  12  15   8 
+## 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 
+##   7   7   6   9  12   5   7   7   3   4   3   3   6   8   5   5   6   6   4   4 
+## 160 161 162 163 164 165 166 167 168 169 170 171 172 174 175 177 178 179 180 181 
+##   5   6   5   3   2   5   1   3   1   4   7   1   3   1   1   1   5   2   4   3 
+## 183 184 185 186 188 189 191 192 193 194 195 196 197 201 202 204 205 207 209 210 
+##   2   1   1   2   3   3   1   1   1   1   1   1   2   2   2   1   1   1   1   1 
+## 212 220 224 228 229 238 242 321  45  64  67  68  69  70  71  72  75  76  78  79 
+##   1   1   1   1   1   1   1   1   1   1   1   1   1   1   2   2   2   3   1   1 
+##  80  81  82  83  84  85  86  87  88  89  90  91  92  93  94  95  96  97  98  99 
+##   6   4   2   2   3   5   6   8   8   7  10   9   9  11  14  13  17   9  11  14</code></pre>
+<pre class="r"><code># Convert to numeric
+df$Runtime &lt;- as.numeric(df$Runtime)
+class(df$Runtime)</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code># Average running time in the 2010s
+df |&gt; 
+  filter(Released_Year &gt;= 2010 &amp; Released_Year &lt; 2020) |&gt; 
+  summarise(mean(Runtime))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   `mean(Runtime)`
+##             &lt;dbl&gt;
+## 1            128.</code></pre>
+<pre class="r"><code># Correlation between running time and IMDB rating
+cor(df$Runtime, df$IMDB_Rating, use=&quot;complete.obs&quot;)</code></pre>
+<pre><code>## [1] 0.2430959</code></pre>
+<ol start="9" style="list-style-type: decimal">
+<li>We can use <code>select_if</code> to select columns satisfying a
 condition and use <code>summarise_if</code> to do calculation on columns
 satisfying a condition. Try the follows to understand these
-functions.</p></li>
+functions.</li>
 </ol>
 <pre class="r"><code># Select only character columns
 df %&gt;% select_if(is.character)
@@ -419,6 +639,196 @@ different from the codes used in other questions.</li>
 <li>filter + group_by + summarise</li>
 <li>filter + group_by + summarise + arrange</li>
 </ul>
+<pre class="r"><code># select: deselect the `Poster_Link` column
+df |&gt; select(-Poster_Link)</code></pre>
+<pre><code>## # A tibble: 1,000 × 15
+##    Series_Title     Released_Year Certificate Runtime Genre IMDB_Rating Overview
+##    &lt;chr&gt;            &lt;chr&gt;         &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;   
+##  1 The Shawshank R… 1994          A               142 Drama         9.3 Two imp…
+##  2 The Godfather    1972          A               175 Crim…         9.2 An orga…
+##  3 The Dark Knight  2008          UA              152 Acti…         9   When th…
+##  4 The Godfather: … 1974          A               202 Crim…         9   The ear…
+##  5 12 Angry Men     1957          U                96 Crim…         9   A jury …
+##  6 The Lord of the… 2003          U               201 Acti…         8.9 Gandalf…
+##  7 Pulp Fiction     1994          A               154 Crim…         8.9 The liv…
+##  8 Schindler&#39;s List 1993          A               195 Biog…         8.9 In Germ…
+##  9 Inception        2010          UA              148 Acti…         8.8 A thief…
+## 10 Fight Club       1999          A               139 Drama         8.8 An inso…
+## # ℹ 990 more rows
+## # ℹ 8 more variables: Meta_score &lt;dbl&gt;, Director &lt;chr&gt;, Star1 &lt;chr&gt;,
+## #   Star2 &lt;chr&gt;, Star3 &lt;chr&gt;, Star4 &lt;chr&gt;, No_of_Votes &lt;dbl&gt;, Gross &lt;dbl&gt;</code></pre>
+<p><strong>Deselecting this column makes the dataframe look less
+cluttered.</strong></p>
+<pre class="r"><code># filter: filter the dataframe to only rated R movies
+df |&gt; filter(Certificate == &#39;R&#39;)</code></pre>
+<pre><code>## # A tibble: 146 × 16
+##    Poster_Link  Series_Title Released_Year Certificate Runtime Genre IMDB_Rating
+##    &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
+##  1 https://m.m… Saving Priv… 1998          R               169 Dram…         8.6
+##  2 https://m.m… The Pianist  2002          R               150 Biog…         8.5
+##  3 https://m.m… American Hi… 1998          R               119 Drama         8.5
+##  4 https://m.m… Apocalypse … 1979          R               147 Dram…         8.4
+##  5 https://m.m… Alien        1979          R               117 Horr…         8.4
+##  6 https://m.m… 1917         2019          R               119 Dram…         8.3
+##  7 https://m.m… Jagten       2012          R               115 Drama         8.3
+##  8 https://m.m… Incendies    2010          R               131 Dram…         8.3
+##  9 https://m.m… Reservoir D… 1992          R                99 Crim…         8.3
+## 10 https://m.m… Amadeus      1984          R               160 Biog…         8.3
+## # ℹ 136 more rows
+## # ℹ 9 more variables: Overview &lt;chr&gt;, Meta_score &lt;dbl&gt;, Director &lt;chr&gt;,
+## #   Star1 &lt;chr&gt;, Star2 &lt;chr&gt;, Star3 &lt;chr&gt;, Star4 &lt;chr&gt;, No_of_Votes &lt;dbl&gt;,
+## #   Gross &lt;dbl&gt;</code></pre>
+<p><strong>There are only 146 movies that are rated R.</strong></p>
+<pre class="r"><code># mutate: make an indicator column for whether the movie was released in the 2000s or not
+df &lt;- df |&gt; mutate(Movie_2000s = ifelse(Released_Year &gt;= 2000, &#39;Y&#39;, &#39;N&#39;))</code></pre>
+<pre class="r"><code>table(df$Movie_2000s)</code></pre>
+<pre><code>## 
+##   N   Y 
+## 514 486</code></pre>
+<p><strong>Most movies were released before the 2000’s, but only by 28
+movies.</strong></p>
+<pre class="r"><code># summarise: find the max runtime of a movie.
+df |&gt; 
+  summarise(max(Runtime))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   `max(Runtime)`
+##            &lt;dbl&gt;
+## 1            321</code></pre>
+<p><strong>The maximum runtime of a movie is 321 minutes.</strong></p>
+<pre class="r"><code># arrange: what is the highest metascore a movie can have? What are 5 movies with this score?
+df |&gt; arrange(-Meta_score)</code></pre>
+<pre><code>## # A tibble: 1,000 × 17
+##    Poster_Link  Series_Title Released_Year Certificate Runtime Genre IMDB_Rating
+##    &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
+##  1 https://m.m… The Godfath… 1972          A               175 Crim…         9.2
+##  2 https://m.m… Casablanca   1942          U               102 Dram…         8.5
+##  3 https://m.m… Rear Window  1954          U               112 Myst…         8.4
+##  4 https://m.m… Lawrence of… 1962          U               228 Adve…         8.3
+##  5 https://m.m… Vertigo      1958          A               128 Myst…         8.3
+##  6 https://m.m… Citizen Kane 1941          UA              119 Dram…         8.3
+##  7 https://m.m… Trois coule… 1994          U                99 Dram…         8.1
+##  8 https://m.m… Fanny och A… 1982          A               188 Drama         8.1
+##  9 https://m.m… Il conformi… 1970          UA              113 Drama         8  
+## 10 https://m.m… Sweet Smell… 1957          Approved         96 Dram…         8  
+## # ℹ 990 more rows
+## # ℹ 10 more variables: Overview &lt;chr&gt;, Meta_score &lt;dbl&gt;, Director &lt;chr&gt;,
+## #   Star1 &lt;chr&gt;, Star2 &lt;chr&gt;, Star3 &lt;chr&gt;, Star4 &lt;chr&gt;, No_of_Votes &lt;dbl&gt;,
+## #   Gross &lt;dbl&gt;, Movie_2000s &lt;chr&gt;</code></pre>
+<p><strong>The highest Meta score is 100. Five movies with this score
+are The Godfather, Casablanca, Rear Window, Lawrence of Arabia, and
+Vertigo.</strong></p>
+<pre class="r"><code># count: who are the directors of the movies? Who are the first 3 in alphabetical order?
+df |&gt; count(Director)</code></pre>
+<pre><code>## # A tibble: 548 × 2
+##    Director                n
+##    &lt;chr&gt;               &lt;int&gt;
+##  1 Aamir Khan              1
+##  2 Aaron Sorkin            1
+##  3 Abdellatif Kechiche     1
+##  4 Abhishek Chaubey        1
+##  5 Abhishek Kapoor         1
+##  6 Adam Elliot             1
+##  7 Adam McKay              1
+##  8 Aditya Chopra           1
+##  9 Aditya Dhar             1
+## 10 Akira Kurosawa         10
+## # ℹ 538 more rows</code></pre>
+<p><strong>Aamir Khan, Aaron Sorkin, and Abdellatif
+Kechiche</strong></p>
+<pre class="r"><code># count + arrange: which director directed the most movies?
+df |&gt; 
+  count(Director) |&gt; 
+  arrange(-n)</code></pre>
+<pre><code>## # A tibble: 548 × 2
+##    Director              n
+##    &lt;chr&gt;             &lt;int&gt;
+##  1 Alfred Hitchcock     14
+##  2 Steven Spielberg     13
+##  3 Hayao Miyazaki       11
+##  4 Akira Kurosawa       10
+##  5 Martin Scorsese      10
+##  6 Billy Wilder          9
+##  7 Stanley Kubrick       9
+##  8 Woody Allen           9
+##  9 Christopher Nolan     8
+## 10 Clint Eastwood        8
+## # ℹ 538 more rows</code></pre>
+<p><strong>Alfred Hitchcock directed the most movies.</strong></p>
+<pre class="r"><code># filter + count + arrange: in what year did Leonardo DiCaprio star in the most movies?
+df |&gt; 
+  filter(Star1 == &quot;Leonardo DiCaprio&quot; | Star2 == &quot;Leonardo DiCaprio&quot; | Star3 == &quot;Leonardo DiCaprio&quot; | Star4 == &quot;Leonardo DiCaprio&quot;) |&gt;
+  count(Released_Year) |&gt; 
+  arrange(-n)</code></pre>
+<pre><code>## # A tibble: 9 × 2
+##   Released_Year     n
+##   &lt;chr&gt;         &lt;int&gt;
+## 1 2006              2
+## 2 2010              2
+## 3 1993              1
+## 4 1997              1
+## 5 2002              1
+## 6 2012              1
+## 7 2013              1
+## 8 2015              1
+## 9 2019              1</code></pre>
+<p><strong>Leonardo DiCaprio starred in the most movies in 2006 in 2010
+releases.</strong></p>
+<pre class="r"><code># group_by + summarise: What is the average IMDB rating of movies per year? List the first 3 release years and the average rating.
+df |&gt; 
+  group_by(Released_Year) |&gt; 
+  summarise(avg_IMDB_rating = mean(IMDB_Rating, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 100 × 2
+##    Released_Year avg_IMDB_rating
+##    &lt;chr&gt;                   &lt;dbl&gt;
+##  1 1920                      8.1
+##  2 1921                      8.3
+##  3 1922                      7.9
+##  4 1924                      8.2
+##  5 1925                      8.1
+##  6 1926                      8.1
+##  7 1927                      8.2
+##  8 1928                      8.1
+##  9 1930                      8  
+## 10 1931                      8.2
+## # ℹ 90 more rows</code></pre>
+<p><strong>1920: 8.1, 1921: 8.3, 1922: 7.9</strong></p>
+<pre class="r"><code># filter + group_by + summarise: of the movies Tom Hanks stars in, what is the average IMDB rating by director? Name the last 3 alphabetically.
+df |&gt; 
+  filter(Star1 == &quot;Tom Hanks&quot; | Star2 == &quot;Tom Hanks&quot; | Star3 == &quot;Tom Hanks&quot; | Star4 == &quot;Tom Hanks&quot;) |&gt; 
+  group_by(Director) |&gt; 
+  summarise(mean(IMDB_Rating, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 10 × 2
+##    Director         `mean(IMDB_Rating, na.rm = TRUE)`
+##    &lt;chr&gt;                                        &lt;dbl&gt;
+##  1 Frank Darabont                                 8.6
+##  2 John Lasseter                                  8.1
+##  3 Jonathan Demme                                 7.7
+##  4 Josh Cooley                                    7.8
+##  5 Lee Unkrich                                    8.2
+##  6 Paul Greengrass                                7.8
+##  7 Robert Zemeckis                                8.3
+##  8 Ron Howard                                     7.6
+##  9 Sam Mendes                                     7.7
+## 10 Steven Spielberg                               8.1</code></pre>
+<p><strong>Ron Howard: 7.6, Sam Mendes: 7.7, Steven Spielberg:
+8.1</strong></p>
+<pre class="r"><code># filter + group_by + summarise + arrange: of the movies that are only in the comedy genre, what certificate has the highest average Meta score? 
+df |&gt; 
+  filter(Genre == &#39;Comedy&#39;) |&gt; 
+  group_by(Certificate) |&gt; 
+  summarise(avg_meta_score = mean(Meta_score, na.rm = TRUE)) |&gt; 
+  arrange(-avg_meta_score)</code></pre>
+<pre><code>## # A tibble: 7 × 2
+##   Certificate avg_meta_score
+##   &lt;chr&gt;                &lt;dbl&gt;
+## 1 PG                    93  
+## 2 A                     88.5
+## 3 G                     86  
+## 4 PG-13                 73  
+## 5 UA                    73  
+## 6 U                     72.3
+## 7 R                     71.7</code></pre>
+<p><strong>PG has the highest average meta score at 93.</strong></p>
 
 
 
