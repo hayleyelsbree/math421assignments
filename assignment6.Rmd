@@ -42,6 +42,7 @@ str(df)
 ```
 
 ```{r}
+# Changing the `waterfront` variable to be categorical and assigning it categories.
 df <- df |> 
   mutate(waterfront = if_else(waterfront == 1, "Waterfront", "No Waterfront"))
 ```
@@ -56,19 +57,19 @@ df <- df |>
 
 
 ```{r}
-# Density Plot
+# Density Plot: price distribution
 df |> ggplot() + geom_density(mapping = aes(x = price))
 ```
 
 
 ```{r}
-# Histogram
+# Histogram: sqft_living distribution
 df |> ggplot() + geom_histogram(mapping = aes(x = sqft_living))
 ```
 
 
 ```{r}
-# Boxplot
+# Boxplot: # bathrooms distribution
 df |> ggplot() + geom_boxplot(mapping = aes(x =  bathrooms))
 ```
 
@@ -79,6 +80,7 @@ df |> ggplot() + geom_boxplot(mapping = aes(x =  bathrooms))
 - Barplot
 
 ```{r}
+# Barplot: waterfront vs no waterfront
 df |> ggplot() + geom_bar(mapping = aes(x = waterfront))
 ```
 
@@ -94,20 +96,20 @@ df |> ggplot() + geom_bar(mapping = aes(x = waterfront))
 - Smooth Plot
 
 ```{r}
-# Scatter Plot: hours per week vs. capital gain 
-# df |> ggplot() + geom_point(mapping = aes(x = , y = ))
+# Scatter Plot: # of bedrooms vs price
+df |> ggplot() + geom_point(mapping = aes(x = bedrooms, y = price))
 ```
 
 
 ```{r}
-# Line Plot:
-# df |> ggplot() + geom_line(mapping = aes(x = , y = ))
+# Line Plot: sqft_lot vs price
+df |> ggplot() + geom_line(mapping = aes(x = sqft_lot, y = price))
 ```
 
 
 ```{r}
-# Smooth Plot:
-# df |> ggplot() + geom_smooth(aes(x = , y = ))
+# Smooth Plot: sqft_living vs price
+df |> ggplot() + geom_smooth(aes(x = sqft_living, y = price))
 ```
 
 -------
@@ -118,13 +120,33 @@ df |> ggplot() + geom_bar(mapping = aes(x = waterfront))
 
 - BoxPlot
 
+```{r}
+# Density Plot
+df |> ggplot() + geom_density(mapping = aes(x = price, color = waterfront))
+```
+
+
+```{r}
+# BoxPlot
+# df |> ggplot() + geom_boxplot(mapping = aes(x = ))
+```
+
 -------
 
 5. For two categorical variables: barplot
+
+```{r}
+# 2 Categorical Variables Barplot: 
+
+```
 
 
 -------
 
 6. A plot that contains three variables
+```{r}
+# Three variable plot
+
+```
 
 
