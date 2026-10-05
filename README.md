@@ -18,3 +18,11 @@
 [Assignment 5 Extra Credit](assignment5_part2.html)
 
 [Assignment 6](assignment6.html)
+
+Assignment 7
+
+Assignment 7 Extra Credit
+
+Assignment 8
+
+Assignment 9
