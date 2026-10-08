@@ -56,6 +56,11 @@ df$grade <- as.character(df$grade)
 str(df)
 ```
 
+```{r}
+# Code Defense
+df |> group_by(condition) |> summarise(avg_price = mean(price)) |> ggplot() + geom_col(mapping = aes(x = condition, y = avg_price))
+```
+
 
 1. For one continuous variable:
 
