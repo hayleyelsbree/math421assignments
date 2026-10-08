@@ -21,6 +21,8 @@
 
 [Assignment 7](assignment7.html)
 
+[Assignment 7 Saved Plot](flipper_vs_mass.png)
+
 [Assignment 7 Extra Credit](assignment7_extra_credits.html)
 
 [Assignment 8](assignment8.html)
