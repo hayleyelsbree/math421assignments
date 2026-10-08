@@ -34,11 +34,37 @@ df1 <- read_csv("C:\\Users\\student\\Downloads\\penguins.csv")
 ```{r}
 str(df1)
 ```
+```{r}
+table(df1$year)
+```
 
 ```{r}
 df1 <- df1 |> drop_na()
 ```
 
+
+```{r}
+# Code Defense
+df1 |> 
+  group_by(year) |> 
+  summarise(avg_bill_length = mean(bill_length_mm)) |> 
+  ggplot() +
+  geom_line(mapping = aes(x = year, y = avg_bill_length))
+```
+
+```{r}
+# Code Defense
+df1 |> 
+  group_by(year) |> 
+  summarise(avg_bill_depth = mean(bill_depth_mm)) |> 
+  ggplot() +
+  geom_line(mapping = aes(x = year, y = avg_bill_depth))
+```
+
+
+```{r}
+df1 <- df1 |> drop_na()
+```
 
 1.  Make a plot using `facet_wrap` by one categorical variable (`facet_wrap(~variable1)`)
 
@@ -90,7 +116,6 @@ df1 |> ggplot() + geom_bar(mapping = aes(x = species, fill = sex), position = 'f
 summary(df1$bill_depth_mm)
 ```
 
-
 ```{r}
 Q1 <- 15.6
 Q3 <- 18.7
@@ -118,7 +143,6 @@ gg <- df1 |> ggplot() +
   facet_wrap(~sex)
 ggsave(filename = 'flipper_vs_mass.png', plot = gg)
 ```
-
 
 ```{r, eval=FALSE}
 [Link to the plot](abc.png)
@@ -157,7 +181,6 @@ df |>
   geom_point(mapping = aes(x = date, y = total_vaccinations, color = vaccine))
 ```
 
-
 - Change `geom_point` to `geom_line` in the above codes to have the corresponding line plots.
 
 ```{r}
@@ -166,7 +189,6 @@ df |>
   ggplot()+
   geom_line(mapping = aes(x = date, y = total_vaccinations, color = vaccine))
 ```
-
 
 11. (Using the same dataset as in 10.) Sometime we need to do some calculations on the data before plotting. For example, the below codes is to compare the total vaccines (including all types of vaccines) by date between the US and the EU
 
@@ -215,7 +237,6 @@ df |>
   geom_point(mapping = aes(x = date, y = total_vac, color = location))
 ```
 
-
 - Use `geom_point` compare the total vaccines (including all types of vaccines) by date between countries/regions in South America in 2021
 
 ```{r}
@@ -226,4 +247,3 @@ df |>
   ggplot() +
   geom_point(mapping = aes(x = date, y = total_vac, color = location))
 ```
-
