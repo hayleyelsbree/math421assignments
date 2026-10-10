@@ -28,9 +28,110 @@ knitr::opts_chunk$set(message = FALSE)
 
 1. Install two packages `gganimate` and `gifski` then restart Rstudio. Using the `Adult Census Income` data, make an animation using `geom_point` and `transition_states`.
 
+```{r, eval=FALSE}
+# Install Packages
+install.packages("gganimate")
+install.packages("gifski")
+```
+
+```{r}
+library(gganimate)
+library(gifski)
+library(tidyverse)
+df <- read_csv("https://bryantstats.github.io/math421/data/adult_census.csv")
+str(df)
+```
+
+```{r}
+df |> ggplot(aes(x = education.num, y = hours.per.week, color = race)) + 
+  geom_point() +
+  transition_states(sex) +
+  labs(title = 'sex: {closest_state}')
+```
+
+
 2. Using the `Adult Census Income` data, make an animation using `geom_bar` and `transition_states`.
+
+```{r}
+df |> ggplot(aes(x = income, fill = sex)) + 
+  geom_bar(position = 'fill') +
+  transition_states(race) +
+  labs(title = 'race: {closest_state}')
+```
+
 
 3. Use the WHO's dataset at [this link](https://covid19.who.int/WHO-COVID-19-global-data.csv). Make a top-10 bar race by months between countries on the number of deaths by Covid 19 in 2021.
 
+```{r}
+df1 <- read_csv("https://bryantstats.github.io/math421/data/WHO-COVID-19-global-data.csv")
+str(df1)
+```
+
+```{r}
+# Data
+library(lubridate)
+df1_data <- df1 |> 
+  filter(year(Date_reported) == 2021) |> 
+  group_by(month = month(Date_reported, label = TRUE, abbr = FALSE), Country) |> 
+  summarise(total_new_deaths = sum(New_deaths))
+
+df1_data_2 <- df1_data |> 
+  group_by(month) |> 
+  mutate(rank=rank(-total_new_deaths))
+
+df1_data_3 <- df1_data_2 |>  filter(rank <= 10)
+```
+
+```{r}
+# Bar race
+p1 <- df1_data_3 |> 
+  ggplot(aes(x = rank, y = total_new_deaths, group = Country, fill = Country, label = Country)) + 
+  geom_col() + 
+  geom_text(aes(y = total_new_deaths, 
+                  label = Country), 
+              hjust = 1.4) + 
+    coord_flip(clip = "off", 
+               expand = FALSE)+
+    scale_x_reverse()+
+    labs(title='{closest_state}', 
+         y='Total New Deaths', x='', fill='')+
+    theme(plot.title = 
+          element_text(hjust=1,size=22),
+          axis.ticks.y=element_blank(),
+          axis.text.y=element_blank(),
+          legend.position = "bottom") + 
+    transition_states(month) +
+    ease_aes("cubic-in-out")
+animate(p1, nframes=400)
+```
+
+
 4. Make a bar race using a dataset of your own interest. You may use the dataset that we use in class (https://covidtracking.com/data/download/all-states-history.csv) but you should make a different bar racev from ones in the slides. 
+
+```{r}
+df2 <- read_csv("https://bryantstats.github.io/math421/data/all-states-history.csv")
+str(df2)
+```
+
+
+```{r}
+# Data
+df2_1 <- df2 |> filter(deathIncrease > 0, hospitalizedIncrease > 0, positiveIncrease > 0)
+
+df2_2 <- df2_1 |> group_by(week = week(date), state) |> summarise(mean = mean((hospitalized/positive) * 100))
+df2_3 <- df2_2|> group_by(week) |> mutate(rank = rank(-mean))
+df2_4 <- df2_3 |> filter(rank <= 10)
+
+# Bar race
+plot <- df2_4 |>  ggplot(aes(x = rank, y = mean, group = state, fill = state, label = state)) + geom_col()+
+    geom_text(aes(y = mean, label = state), hjust = 1.4)+ 
+    coord_flip(clip = "off", expand = FALSE) +scale_x_reverse()+
+    labs(title = 'Week {closest_state}', x = '', y = 'Hosiptalization Rate (%)', fill = 'state') +
+    theme(plot.title = element_text(hjust = 1, size = 22),
+          axis.ticks.y = element_blank(),
+          axis.text.y  = element_blank()) + 
+    transition_states(week)+
+    ease_aes("cubic-in-out")
+animate(plot, nframes = 400)
+```
 
