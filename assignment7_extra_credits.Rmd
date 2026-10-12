@@ -109,6 +109,7 @@ df |>
   geom_boxplot(mapping = aes(x = experience_level, y = salary_in_usd, fill = experience_level)) +
   labs(x = 'Experience Level',
        y = 'Salary (USD)',
+       fill = 'Experience Level',
        title = 'Salary Distribution by Experience Level',
        caption = 'Entry-level and mid-level jobs have a small difference between their median salaries.')
 ```
