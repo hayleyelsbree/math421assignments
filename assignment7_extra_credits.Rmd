@@ -87,3 +87,74 @@ df |>
 **Russia gives the highest average salary.**
 
 7. Plot five meaningful plots. All plots should have title, caption, and appropriate labels.
+
+```{r}
+# 1
+df |> 
+  group_by(work_year) |> 
+  summarise(avg = mean(salary_in_usd)) |> 
+  ggplot() + 
+  geom_line(mapping = aes(x = work_year, y = avg)) +
+  labs(x = 'Year',
+       y = 'Salary (in USD)',
+       title = 'Average Salary by Year',
+       caption = 'The average salary of data science jobs increases over time, with a large increase from 2021 to 2022.')
+```
+
+
+```{r}
+# 2
+df |> 
+  ggplot() +
+  geom_boxplot(mapping = aes(x = experience_level, y = salary_in_usd, fill = experience_level)) +
+  labs(x = 'Experience Level',
+       y = 'Salary (USD)',
+       title = 'Salary Distribution by Experience Level',
+       caption = 'Entry-level and mid-level jobs have a small difference between their median salaries.')
+```
+
+
+```{r}
+# 3
+df |> 
+  group_by(experience_level, work_year) |> 
+  summarise(avg = mean(salary_in_usd)) |> 
+  ggplot() + 
+  geom_line(mapping = aes(x = work_year, y = avg, color = experience_level)) +
+  labs(x = 'Year',
+       y = 'Salary (in USD)',
+       color = 'Experience Level',
+       title = 'Average Salary by Experience Level by Year',
+       caption = 'All experience levels, except executives, did not see a significant change in average salary over time.')
+```
+
+
+```{r}
+# 4
+df |> 
+  mutate(remote_ratio = as.character(remote_ratio)) |> 
+  ggplot() +
+  geom_bar(mapping = aes(x = employment_type, fill = remote_ratio), position = 'fill') +
+  labs(x = 'Employment Type',
+       y = 'Proportion',
+       fill = 'Remote Ratio',
+       title = 'Remote Work Distribution by Employment Type',
+       caption = 'Contract workers are fully remote, and no employment type is in office 100% of the time.') 
+```
+
+
+```{r}
+# 5
+df |> 
+  mutate(remote_ratio = as.character(remote_ratio)) |> 
+  group_by(remote_ratio, work_year) |> 
+  summarise(avg = mean(salary_in_usd)) |> 
+  ggplot() + 
+  geom_line(mapping = aes(x = work_year, y = avg, color = remote_ratio)) +
+  labs(x = 'Year',
+       y = 'Salary (in USD)',
+       color = 'Remote Ratio',
+       title = 'Average Salary by Remote Ratio by Year',
+       caption = 'Fully remote workers tend to have the highest average salaries.')
+```
+
