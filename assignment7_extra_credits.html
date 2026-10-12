@@ -370,15 +370,130 @@ the assignment to Canvas</p>
 <ol style="list-style-type: decimal">
 <li><p>Import the data at <a href="https://bryantstats.github.io/math421/data/ds_salaries.csv" class="uri">https://bryantstats.github.io/math421/data/ds_salaries.csv</a></p>
 <p>The data description can be found at <a href="https://www.kaggle.com/datasets/saurabhshahane/data-science-jobs-salaries" class="uri">https://www.kaggle.com/datasets/saurabhshahane/data-science-jobs-salaries</a></p></li>
-<li><p>Is there any column that contains NAs?</p></li>
-<li><p>What is the most frequent job title in the data?</p></li>
-<li><p>Find the average salary data of the three most frequent job
-titles in the data.</p></li>
-<li><p>What is the job title that have the highest average
-salary?</p></li>
-<li><p>Which country gives the highest salary on average?</p></li>
-<li><p>Plot five meaningful plots. All plots should have title, caption,
-and appropriate labels.</p></li>
+</ol>
+<pre class="r"><code>library(tidyverse)
+df &lt;- read_csv(&quot;https://bryantstats.github.io/math421/data/ds_salaries.csv&quot;)
+str(df)</code></pre>
+<pre><code>## spc_tbl_ [607 × 11] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+##  $ work_year         : num [1:607] 2020 2020 2020 2020 2020 2020 2020 2020 2020 2020 ...
+##  $ experience_level  : chr [1:607] &quot;MI&quot; &quot;SE&quot; &quot;SE&quot; &quot;MI&quot; ...
+##  $ employment_type   : chr [1:607] &quot;FT&quot; &quot;FT&quot; &quot;FT&quot; &quot;FT&quot; ...
+##  $ job_title         : chr [1:607] &quot;Data Scientist&quot; &quot;Machine Learning Scientist&quot; &quot;Big Data Engineer&quot; &quot;Product Data Analyst&quot; ...
+##  $ salary            : num [1:607] 70000 260000 85000 20000 150000 72000 190000 11000000 135000 125000 ...
+##  $ salary_currency   : chr [1:607] &quot;EUR&quot; &quot;USD&quot; &quot;GBP&quot; &quot;USD&quot; ...
+##  $ salary_in_usd     : num [1:607] 79833 260000 109024 20000 150000 ...
+##  $ employee_residence: chr [1:607] &quot;DE&quot; &quot;JP&quot; &quot;GB&quot; &quot;HN&quot; ...
+##  $ remote_ratio      : num [1:607] 0 0 50 0 50 100 100 50 100 50 ...
+##  $ company_location  : chr [1:607] &quot;DE&quot; &quot;JP&quot; &quot;GB&quot; &quot;HN&quot; ...
+##  $ company_size      : chr [1:607] &quot;L&quot; &quot;S&quot; &quot;M&quot; &quot;S&quot; ...
+##  - attr(*, &quot;spec&quot;)=
+##   .. cols(
+##   ..   work_year = col_double(),
+##   ..   experience_level = col_character(),
+##   ..   employment_type = col_character(),
+##   ..   job_title = col_character(),
+##   ..   salary = col_double(),
+##   ..   salary_currency = col_character(),
+##   ..   salary_in_usd = col_double(),
+##   ..   employee_residence = col_character(),
+##   ..   remote_ratio = col_double(),
+##   ..   company_location = col_character(),
+##   ..   company_size = col_character()
+##   .. )
+##  - attr(*, &quot;problems&quot;)=&lt;externalptr&gt;</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Is there any column that contains NAs?</li>
+</ol>
+<pre class="r"><code>colSums(is.na(df))</code></pre>
+<pre><code>##          work_year   experience_level    employment_type          job_title 
+##                  0                  0                  0                  0 
+##             salary    salary_currency      salary_in_usd employee_residence 
+##                  0                  0                  0                  0 
+##       remote_ratio   company_location       company_size 
+##                  0                  0                  0</code></pre>
+<p><strong>There are no columns that contain NAs.</strong></p>
+<ol start="3" style="list-style-type: decimal">
+<li>What is the most frequent job title in the data?</li>
+</ol>
+<pre class="r"><code>df |&gt; count(job_title) |&gt; arrange(-n)</code></pre>
+<pre><code>## # A tibble: 50 × 2
+##    job_title                      n
+##    &lt;chr&gt;                      &lt;int&gt;
+##  1 Data Scientist               143
+##  2 Data Engineer                132
+##  3 Data Analyst                  97
+##  4 Machine Learning Engineer     41
+##  5 Research Scientist            16
+##  6 Data Science Manager          12
+##  7 Data Architect                11
+##  8 Big Data Engineer              8
+##  9 Machine Learning Scientist     8
+## 10 AI Scientist                   7
+## # ℹ 40 more rows</code></pre>
+<p><strong>“Data Scientist” is the most frequent job title in the
+data.</strong></p>
+<ol start="4" style="list-style-type: decimal">
+<li>Find the average salary data of the three most frequent job titles
+in the data.</li>
+</ol>
+<pre class="r"><code>df |&gt; 
+  filter(job_title %in% c(&quot;Data Scientist&quot;, &quot;Data Engineer&quot;, &quot;Data Analyst&quot;)) |&gt; 
+  group_by(job_title) |&gt; 
+  summarise(mean_salary = mean(salary_in_usd))</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   job_title      mean_salary
+##   &lt;chr&gt;                &lt;dbl&gt;
+## 1 Data Analyst        92893.
+## 2 Data Engineer      112725 
+## 3 Data Scientist     108188.</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>What is the job title that have the highest average salary?</li>
+</ol>
+<pre class="r"><code>df |&gt; 
+  group_by(job_title) |&gt; 
+  summarise(mean_salary = mean(salary_in_usd)) |&gt; 
+  arrange(-mean_salary)</code></pre>
+<pre><code>## # A tibble: 50 × 2
+##    job_title                mean_salary
+##    &lt;chr&gt;                          &lt;dbl&gt;
+##  1 Data Analytics Lead          405000 
+##  2 Principal Data Engineer      328333.
+##  3 Financial Data Analyst       275000 
+##  4 Principal Data Scientist     215242.
+##  5 Director of Data Science     195074 
+##  6 Data Architect               177874.
+##  7 Applied Data Scientist       175655 
+##  8 Analytics Engineer           175000 
+##  9 Data Specialist              165000 
+## 10 Head of Data                 160163.
+## # ℹ 40 more rows</code></pre>
+<p><strong>“Data Analytics Lead” has the highest average
+salary.</strong></p>
+<ol start="6" style="list-style-type: decimal">
+<li>Which country gives the highest salary on average?</li>
+</ol>
+<pre class="r"><code>df |&gt; 
+  group_by(company_location) |&gt; 
+  summarise(mean_salary = mean(salary_in_usd)) |&gt; 
+  arrange(-mean_salary)</code></pre>
+<pre><code>## # A tibble: 50 × 2
+##    company_location mean_salary
+##    &lt;chr&gt;                  &lt;dbl&gt;
+##  1 RU                   157500 
+##  2 US                   144055.
+##  3 NZ                   125000 
+##  4 IL                   119059 
+##  5 JP                   114127.
+##  6 AU                   108043.
+##  7 AE                   100000 
+##  8 DZ                   100000 
+##  9 IQ                   100000 
+## 10 CA                    99824.
+## # ℹ 40 more rows</code></pre>
+<p><strong>Russia gives the highest average salary.</strong></p>
+<ol start="7" style="list-style-type: decimal">
+<li>Plot five meaningful plots. All plots should have title, caption,
+and appropriate labels.</li>
 </ol>
 
 

@@ -31,15 +31,59 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 1. Import the data at https://bryantstats.github.io/math421/data/ds_salaries.csv
 
     The data description can be found at https://www.kaggle.com/datasets/saurabhshahane/data-science-jobs-salaries
+    
+```{r}
+library(tidyverse)
+df <- read_csv("https://bryantstats.github.io/math421/data/ds_salaries.csv")
+str(df)
+```
+   
 
 2. Is there any column that contains NAs?
 
-3. What is the most frequent job title in the data?  
+```{r}
+colSums(is.na(df))
+```
+**There are no columns that contain NAs.**
+
+3. What is the most frequent job title in the data?
+
+```{r}
+df |> count(job_title) |> arrange(-n)
+```
+
+**"Data Scientist" is the most frequent job title in the data.**
 
 4. Find the average salary data of the three most frequent job titles in the data. 
 
+```{r}
+df |> 
+  filter(job_title %in% c("Data Scientist", "Data Engineer", "Data Analyst")) |> 
+  group_by(job_title) |> 
+  summarise(mean_salary = mean(salary_in_usd))
+```
+
+
 5. What is the job title that have the highest average salary?
 
-6. Which country gives the highest salary on average? 
+```{r}
+df |> 
+  group_by(job_title) |> 
+  summarise(mean_salary = mean(salary_in_usd)) |> 
+  arrange(-mean_salary)
+```
+
+**"Data Analytics Lead" has the highest average salary.**
+
+6. Which country gives the highest salary on average?
+
+```{r}
+df |> 
+  group_by(company_location) |> 
+  summarise(mean_salary = mean(salary_in_usd)) |> 
+  arrange(-mean_salary)
+```
+
+**Russia gives the highest average salary.**
 
 7. Plot five meaningful plots. All plots should have title, caption, and appropriate labels.
