@@ -36,13 +36,86 @@ Hint:
 
 -  Pipe with `arrange(-Cumulative_deaths)` to rank the data by the number of cumulative deaths
 
+```{r}
+library(tidyverse)
+
+df <- read_csv("https://bryantstats.github.io/math421/data/WHO-COVID-19-global-data.csv")
+str(df)
+```
+
+```{r}
+df |> 
+  filter(Date_reported == max(Date_reported)) |> 
+  arrange(-Cumulative_deaths)
+```
+
+**The top 3 countries with the most cumulative deaths are the US, Brazil, and India.**
 
 2. Use `transition_reveal` to make a plot revealing the number of deaths in the three countries with the most numbers of deaths
 
+```{r}
+library(gganimate)
+df |> 
+  filter(Country_code %in% c("US", "BR", "IN")) |> 
+  ggplot(aes(y = Cumulative_deaths, x = Date_reported, color = Country)) +
+  geom_line() +
+  transition_reveal(Date_reported) +
+  labs(x='Date Reported', 
+       y = 'Cumulative Deaths', 
+       color='Country', 
+       title = 'Cumulative Deaths in the US, Brazil, and India Over Time', 
+       caption = 'The US has more cumulative deaths than Brazil and India consistently over time.')
+```
+
+
 3. Create the new variable (column) `death_per_cases` recording the number of deaths per cases (Hint: divide cumulative deaths by cumulative cases).  What are the three countries with the highest deaths per cases? 
+
+```{r}
+df <- df |> mutate(death_per_cases = (Cumulative_deaths / Cumulative_cases))
+df |> filter(Date_reported == max(Date_reported)) |> arrange(-death_per_cases)
+```
+
+**Yemem, Sudan, and Syrian Arab Republic are the top 3 countries with the most amount of deaths per cases on the most current date in the dataset.**
 
 4. Use `transition_reveal` to make a plot revealing the number of deaths per cases of the US, Italy and Mexico. 
 
+```{r}
+df |> 
+  filter(Country_code %in% c("US", "IT", "MX")) |> 
+  ggplot(aes(y = death_per_cases, x = Date_reported, color = Country)) +
+  geom_line() +
+  transition_reveal(Date_reported) +
+  labs(x='Date Reported', 
+       y = 'Death per Cases', 
+       color='Country', 
+       title = 'Death per Cases Rate in the US, Italy, and Mexico.', 
+       caption = 'Mexico has the highest death per cases rate out of these 3 countries.')
+```
+
+
 5. Import the following data https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv
-                      
+
+```{r}
+df1 <- read_csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv")
+head(df1)
+```
+
 Use `transition_reveal` to plot the total vaccinations per hundred by level of income. Hint: the levels of income are identified in the `location` variable. Put a short comment on the caption of the plot. 
+
+```{r}
+table(df1$location)
+```
+
+```{r}
+df1 |> 
+  filter(str_detect(location, "income")) |> 
+  ggplot(aes(y = total_vaccinations_per_hundred, x = date, color = location)) +
+  geom_line() +
+  transition_reveal(date) +
+  labs(x = 'Date',
+       y = 'Total Vaccinations per Hundred',
+       color = 'Income Level',
+       title = 'Total Vaccinations per Hundred by Income Level',
+       caption = 'Higher income countries get vaccinated at a faster rate than lower income countries.')
+```
+
