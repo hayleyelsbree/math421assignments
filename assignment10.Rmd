@@ -123,7 +123,7 @@ barplot(tree_model$variable.importance)
 ```{r}
 # Tree 1: decrease `maxdepth`
 tree_model1 <- rpart(target ~ ., data = df_train,
-                 control = rpart.control(maxdepth = 3))
+                 control = rpart.control(maxdepth = 2))
 
 # Predict on testing data
 pred1 <- predict(tree_model1, df_test, type = "class")
@@ -135,7 +135,7 @@ cm1$overall[1]
 
 
 ```{r}
-# Tree 2: 
+# Tree 2: increase `minsplit`
 tree_model2 <- rpart(target ~ ., data = df_train,
                  control = rpart.control(minsplit = 50))
 
@@ -149,7 +149,7 @@ cm2$overall[1]
 
 
 ```{r}
-# Tree 3: 
+# Tree 3: increase `minbucket`
 tree_model3 <- rpart(target ~ ., data = df_train,
                  control = rpart.control(minbucket = 5))
 
@@ -161,7 +161,7 @@ cm3 <- confusionMatrix(data = pred3, reference = df_test$target, positive = ">50
 cm3$overall[1]
 ```
 
-**All testing accuracies are the same for the 4 trees developed.**
+**The testing accuracies are the same for the initial tree, tree 2, and tree 3. Tree 1 has a decreased accuracy because `maxdepth` decreased.**
 
 4. Practice Random Forest.  Do the follows: 
 
@@ -170,7 +170,7 @@ cm3$overall[1]
 ```{r}
 library(randomForest)
 
-forest_model = randomForest(target ~ ., data=df_train, ntree = 1000)
+forest_model <- randomForest(target ~ ., data=df_train, ntree = 1000)
 ```
 
   
@@ -200,7 +200,7 @@ barplot(forest_importance)
 
 ```{r}
 # Forest 1: Decrease `ntree` (number of trees grown)
-forest_model1 = randomForest(target ~ ., data=df_train, ntree = 100)
+forest_model1 <- randomForest(target ~ ., data=df_train, ntree = 500)
 
 # Accuracy
 pred1 <- predict(forest_model1, df_test, type = "class")
@@ -216,7 +216,7 @@ forest_model$mtry
 
 ```{r}
 # Forest 2: Increase `mtry` (number of predictors sampled for spliting at each node)
-forest_model2 = randomForest(target ~ ., data=df_train, ntree = 1000, mtry = 5)
+forest_model2 <-randomForest(target ~ ., data=df_train, mtry = 5)
 
 # Accuracy
 pred2 <- predict(forest_model2, df_test, type = "class")
@@ -229,7 +229,7 @@ cm2$overall[1]
 
 ```{r}
 # Forest 3: limit tree depth (`maxnodes`)
-forest_model3 = randomForest(target ~ ., data=df_train, maxnodes = 20)
+forest_model3 <- randomForest(target ~ ., data=df_train, maxnodes = 20)
 
 # Accuracy
 pred3 <- predict(forest_model3, df_test, type = "class")
@@ -239,8 +239,12 @@ cm3 <- confusionMatrix(data = pred3, reference = df_test$target, positive = ">50
 cm3$overall[1]
 ```
 
-**The best random forest model is the initial model using the parameter `ntree = 1000` which has an accuracy of 0.8633726.**
+**The best random forest model is forest 1 using the parameter `ntree = 500` which has an accuracy of 0.8640358.**
+
+
+
 
 6. What is the best model (in term of testing accuracy) among all models (including trees and forests) you have trained?
 
-**The best model is [decision tree/random forest] [initial/1/2/3] using the parameter `parameter = x` which has an accuracy of**
+
+**The best model is random forest 1 using the parameter `ntree = 500` which has an accuracy of 0.8640358.**
