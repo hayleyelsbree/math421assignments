@@ -26,6 +26,28 @@ knitr::opts_chunk$set(message = FALSE)
 
 1. Use the `PimaIndiansDiabetes` dataset. Use 15% data for testing. Use cross-validation with of 7 folds to tune random forest `(method='ranger')`.  What are the parameters that produce the greatest accuracy? What is the testing accuracy. 
 
+```{r}
+# Random Forest (CV - 7 folds)
+```
+
+
 2. Use the `PimaIndiansDiabetes` dataset. Go to https://topepo.github.io/caret/available-models.html and pick a classification model.  Tune the classification model using cross-validation of 7 folds. 
 
+```{r}
+# Classification Model (CV - 7 folds)
+```
+
+
 3. (Model Comparison) Use the `PimaIndiansDiabetes` dataset. Pick two models at [this link](https://topepo.github.io/caret/available-models.html) to compare using 7-fold cross validation method. Evaluate the accuracy of the final model on the test data. 
+
+
+```{r}
+# Model 1
+
+```
+
+
+```{r}
+# Model 2
+```
+

@@ -1,0 +1,215 @@
+---
+title: "Midterm"
+format: html
+editor: visual
+---
+
+# Part 1: Data Wrangling
+
+### 1. Download the data file `hdd0318cy.sas7bdat`.
+
+### 2. Use `read_sas` in library `haven` to read the data.
+
+```{r}
+# Import Data
+library(haven)
+
+df <- read_sas("C:\\Users\\student\\Downloads\\hdd0318cy.sas7bdat")
+head(df)
+```
+
+### 3.  Filter the data to have only patients of the year 2018 (yod=18)
+### 4.  Select to work with only following variables
+
+```{r}
+# 3 and 4
+library(tidyverse)
+df <- df |> filter(yod == 18) |> select("yod", "payfix","pay_ub92","age",  
+                      "sex","raceethn","provider","moa", 
+                      "yoa","mod","admtype", "asource" , 
+                      "preopday" ,"los", "service" , "icu","ccu",    
+                      "dispub92", "payer"  ,"drg","trandb", 
+                      "randbg","randbs","orr", "anes","seq",   
+                      "lab","dtest", "ther","blood","phar", 
+                      "other","patcon","bwght","total","tot" ,  
+                      "ecodub92","b_wt","pt_state","diag_adm","ancilar" ,
+                      "campus","er_fee","er_chrg","er_mode","obs_chrg",
+                      "obs_hour","psycchrg","nicu_day")
+head(df)
+```
+
+```{r}
+# Write to CSV
+write_csv(df, "midterm.csv")
+```
+
+### 5.  What are variables that have missing values?
+
+```{r}
+library(tidyverse)
+df <- read_csv("midterm.csv")
+head(df)
+```
+
+
+```{r}
+colSums(is.na(df))
+```
+
+Answer: `payfix`, `raceethn`, `admtype`, `preopday`, `bwght`, `ecodub92`, `pt_state`, `diag_adm`, `er_mode`, `obs_hour`, and `nicu_day` have missing values.
+
+
+### 6.  Remove all variables with missing values.
+
+```{r}
+df <- df |> select(-c("payfix", "raceethn", "admtype", "preopday", "bwght", "ecodub92", "pt_state", "diag_adm", "er_mode", "obs_hour", "nicu_day"))
+```
+
+```{r}
+# Verify
+colSums(is.na(df))
+```
+
+```{r}
+# Save cleaned file to CSV
+write_csv(df, "midterm_cleaned.csv")
+```
+
+
+### 7.  Refer to the data description in the file `HDD2015-18cy6-20-19.docx`, which variable recording the month of admission?, which variable recording the month of discharge?
+
+Answer: `moa` is the month of admission variable, and `mod` is the month of discharge variable.
+
+
+### 8.  Which month admitted the most number of patients? Which month admitted the most number of male patients?
+
+```{r}
+df |> 
+  count(moa) |> 
+  arrange(-n)
+```
+
+```{r}
+df |> 
+  filter(sex == 1) |> 
+  count(moa) |> 
+  arrange(-n)
+```
+
+Answer: October admitted the most patients overall as well as male patients only.
+
+
+### 9.  Which month has the most number of teenage female patients?
+
+```{r}
+df |> 
+  filter(between(age, 13,19)) |> 
+  count(moa) |> 
+  arrange(-n)
+```
+
+Answer: October also has the most teenage female admittances.
+
+
+### 10. Which provider has the most number of female patients in October?
+
+```{r}
+df |> 
+  filter(sex == 2 & moa == 10) |> 
+  count(provider) |> 
+  arrange(-n)
+```
+
+Answer: Provider `7205` has the most female patients in October.
+
+
+### 11. Are female patients older than male patients, on average?
+
+```{r}
+df |> 
+  group_by(sex) |> 
+  summarise(average_age =  mean(age)) |> 
+  arrange(-average_age)
+```
+
+Answer: Male patients are older than female patients on average.
+
+
+### 12. Calculate the average age of patients by months. Which month has the oldest patients on average age?
+
+```{r}
+df |> 
+  group_by(moa) |> 
+  summarise(average_age = mean(age)) |> 
+  arrange(-average_age)
+```
+
+Answer: January has the oldest patients on average.
+
+
+### 13. What is the name of the provider that has the highest total charge?
+
+```{r}
+df |> 
+  group_by(provider) |> 
+  summarise(average_total_charge = mean(tot)) |> 
+  arrange(-average_total_charge)
+```
+
+Answer: Provider `7215` has the hightest average total charge.
+
+
+### 14. What is the name of the provider that has the least total charge for teenage male on average?
+
+```{r}
+df |> 
+  filter(sex == 1 & between(age, 13, 19)) |> 
+  group_by(provider) |> 
+  summarise(average_total_charge = mean(tot)) |> 
+  arrange(average_total_charge)
+```
+
+Answer: Provider `7206` has the lowest average total charge for teenage male patients.
+
+
+### 15. Create a season (Spring, Summer, Fall, Winter) variable. Calculate the length of stays by season. Which season has the longest length of stays on average?
+
+```{r}
+# Create season variable
+
+df$season <- case_when(df$moa %in% c(12, 1, 2) ~ "Winter",
+                       df$moa %in% c(3, 4, 5) ~ "Spring",
+                       df$moa %in% c(6, 7, 8) ~ "Summer",
+                       df$moa %in% c(9, 10, 11) ~ "Fall")
+
+head(df)
+```
+
+
+```{r}
+df |> 
+  group_by(season) |> 
+  summarise(avg_length_of_stays = mean(los)) |> 
+  arrange(-avg_length_of_stays)
+```
+
+Answer: Summer has the highest average length of stays.
+
+### 16. On average, how much a 20 year-old male get charged for staying 1 day in the Fall season?
+
+```{r}
+df |> 
+  filter(age == 20 & sex == 1 & los == 1 & season == "Fall") |> 
+  group_by(season) |> 
+  summarise(avg_charge = mean(tot))
+  
+```
+
+Answer: On average, a 20-year old male gets charged $16,511 for staying 1 day in the fall season.
+
+
+### 17. Write a paragraph to summarize the section and give your comments on the results. You could do some other calculations to support your points.
+(paragraph here)
+
+
+# Part 2: Data Visualization

@@ -29,35 +29,65 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 1. Install the package mlbench and use the follows to import the data
 
 ```{r}
-library(mlbench)
+library(caret)
 library(tidyverse)
-data(PimaIndiansDiabetes)
-# df <- tibble(PimaIndiansDiabetes)
+df <- read_csv("C:\\Users\\student\\Downloads\\PimaIndiansDiabetes.csv")
+head(df)
 ```
+
+```{r}
+# Cleaning
+df <- df |> rename(target = diabetes)
+
+colSums(is.na(df))
+```
+
+```{r}
+# Split Data into Training and Testing
+splitIndex <- createDataPartition(df$target, p = 0.70, list = FALSE)
+
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+```
+
 
 Train and Test a decision tree and a random forest with caret. Plot the variable importance of these models. 
 
 ```{r}
 # Decision Tree
+test_target_factor <- factor(df_test$target, levels = c("neg", "pos"))
 
+
+dt <- train(target~., data = df_train, method = "rpart2", maxdepth = 3)
+pred <- predict(dt, df_test)
+
+cm <- confusionMatrix(data = pred, reference = test_target_factor, positive = "pos")
+
+cm$overall[1]
 ```
 
 
 ```{r}
 # Plot DT Importance
-
+plot(varImp(dt))
 ```
 
 
 ```{r}
 # Random Forest
+rf <- train(target~., data = df_train, method = "rf", ntree = 1000)
+pred <- predict(rf, df_test)
 
+
+cm <- confusionMatrix(data = pred, reference = test_target_factor, positive = "pos")
+
+cm$overall[1]
 ```
 
 
 ```{r}
 # Plot RF Importance
-
+plot(varImp(rf))
 ```
 
 
@@ -65,38 +95,62 @@ Train and Test a decision tree and a random forest with caret. Plot the variable
 
 ```{r}
 # `glmnet` model
+library(glmnet)
 
+glmnet <- train(target~., data = df_train, method = "glmnet")
+pred <- predict(glmnet, df_test)
+
+cm = confusionMatrix(data = pred, reference = test_target_factor, positive = "pos")
+
+cm$overall[1]
 ```
 
 
 ```{r}
 # Plot Importance
-
+plot(varImp(glmnet))
 ```
 
 
 3. Train and test two models that are not `ranger`, `glmnet` or `rpart`  with caret. If possible, plot the variable importance of the model. 
 
 ```{r}
-# Model 1: ``
+# Model 1: `ada`
+library(fastAdaboost)
 
+ada <- train(target~., data = df_train, method = "adaboost", iter = 10)
+pred <- predict(ada, df_test)
+
+cm = confusionMatrix(data = pred, reference = test_target_factor, positive = "pos")
+
+cm$overall[1]
 ```
 
 
 ```{r}
 # Plot Importance
-
+plot(varImp(ada))
 ```
 
 
 ```{r}
-# Model 2: ``
+# Model 2: `xgbTree`
+library(xgboost)
+df_train$target <- factor(df_train$target, 
+                          levels = c(0, 1), 
+                          labels = c("neg", "pos"))
 
+xgb <- train(target~., data = df_train, method = "xgbTree", nrounds = 50)
+pred <- predict(xgb, df_test)
+
+cm = confusionMatrix(data = pred, reference = test_target_factor, positive = "pos")
+
+cm$overall[1]
 ```
 
 
 ```{r}
 # Plot Importance
-
+plot(varImp(xgb))
 ```
 

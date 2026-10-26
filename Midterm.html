@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Midterm</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Midterm_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Midterm_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Midterm_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="Midterm_files/libs/quarto-html/popper.min.js"></script>
+<script src="Midterm_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Midterm_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Midterm_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Midterm_files/libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Midterm_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Midterm_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Midterm_files/libs/bootstrap/bootstrap-215b371544c282197b31c8aa00ce3677.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Midterm</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="part-1-data-wrangling" class="level1">
+<h1>Part 1: Data Wrangling</h1>
+<section id="download-the-data-file-hdd0318cy.sas7bdat." class="level3">
+<h3 class="anchored" data-anchor-id="download-the-data-file-hdd0318cy.sas7bdat.">1. Download the data file <code>hdd0318cy.sas7bdat</code>.</h3>
+</section>
+<section id="use-read_sas-in-library-haven-to-read-the-data." class="level3">
+<h3 class="anchored" data-anchor-id="use-read_sas-in-library-haven-to-read-the-data.">2. Use <code>read_sas</code> in library <code>haven</code> to read the data.</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import Data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'haven' was built under R version 4.4.3</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_sas</span>(<span class="st">"C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">student</span><span class="sc">\\</span><span class="st">Downloads</span><span class="sc">\\</span><span class="st">hdd0318cy.sas7bdat"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 135
+    yod payfix pay_ub92   age sex   raceethn filler1 filler2 provider   moa
+  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;
+1     3     NA       NA    39 2     1        02910   ""      7216         2
+2     3     NA       NA    59 2     1        02895   ""      7216         1
+3     3     NA       NA    57 1     1        02888   ""      7216         2
+4     3     NA       NA    54 2     1        02920   ""      7216         2
+5     3     NA       NA    54 2     1        02889   ""      7216         1
+6     3     NA       NA    54 2     1        02889   ""      7216         3
+# ℹ 125 more variables: yoa &lt;dbl&gt;, mod &lt;dbl&gt;, admtype &lt;chr&gt;, asource &lt;chr&gt;,
+#   filler3 &lt;chr&gt;, dx1 &lt;chr&gt;, dx2 &lt;chr&gt;, dx3 &lt;chr&gt;, dx4 &lt;chr&gt;, dx5 &lt;chr&gt;,
+#   dx6 &lt;chr&gt;, dx7 &lt;chr&gt;, px1 &lt;chr&gt;, px2 &lt;chr&gt;, px3 &lt;chr&gt;, px4 &lt;chr&gt;,
+#   px5 &lt;chr&gt;, px6 &lt;chr&gt;, px7 &lt;chr&gt;, px8 &lt;chr&gt;, px9 &lt;chr&gt;, px10 &lt;chr&gt;,
+#   preopday &lt;dbl&gt;, los &lt;dbl&gt;, filler4 &lt;chr&gt;, service &lt;chr&gt;, icu &lt;chr&gt;,
+#   ccu &lt;chr&gt;, dispub92 &lt;chr&gt;, payer &lt;chr&gt;, drg &lt;dbl&gt;, trandb &lt;chr&gt;,
+#   randbg &lt;chr&gt;, randbs &lt;chr&gt;, orr &lt;chr&gt;, anes &lt;chr&gt;, seq &lt;chr&gt;, lab &lt;chr&gt;, …</code></pre>
+</div>
+</div>
+</section>
+<section id="filter-the-data-to-have-only-patients-of-the-year-2018-yod18" class="level3">
+<h3 class="anchored" data-anchor-id="filter-the-data-to-have-only-patients-of-the-year-2018-yod18">3. Filter the data to have only patients of the year 2018 (yod=18)</h3>
+</section>
+<section id="select-to-work-with-only-following-variables" class="level3">
+<h3 class="anchored" data-anchor-id="select-to-work-with-only-following-variables">4. Select to work with only following variables</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3 and 4</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyverse' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tibble' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyr' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'readr' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'purrr' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'stringr' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'forcats' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'lubridate' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.2.1     ✔ readr     2.2.0
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+✔ purrr     1.2.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> <span class="fu">filter</span>(yod <span class="sc">==</span> <span class="dv">18</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="st">"yod"</span>, <span class="st">"payfix"</span>,<span class="st">"pay_ub92"</span>,<span class="st">"age"</span>,  </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"sex"</span>,<span class="st">"raceethn"</span>,<span class="st">"provider"</span>,<span class="st">"moa"</span>, </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"yoa"</span>,<span class="st">"mod"</span>,<span class="st">"admtype"</span>, <span class="st">"asource"</span> , </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"preopday"</span> ,<span class="st">"los"</span>, <span class="st">"service"</span> , <span class="st">"icu"</span>,<span class="st">"ccu"</span>,    </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"dispub92"</span>, <span class="st">"payer"</span>  ,<span class="st">"drg"</span>,<span class="st">"trandb"</span>, </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"randbg"</span>,<span class="st">"randbs"</span>,<span class="st">"orr"</span>, <span class="st">"anes"</span>,<span class="st">"seq"</span>,   </span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"lab"</span>,<span class="st">"dtest"</span>, <span class="st">"ther"</span>,<span class="st">"blood"</span>,<span class="st">"phar"</span>, </span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"other"</span>,<span class="st">"patcon"</span>,<span class="st">"bwght"</span>,<span class="st">"total"</span>,<span class="st">"tot"</span> ,  </span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"ecodub92"</span>,<span class="st">"b_wt"</span>,<span class="st">"pt_state"</span>,<span class="st">"diag_adm"</span>,<span class="st">"ancilar"</span> ,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"campus"</span>,<span class="st">"er_fee"</span>,<span class="st">"er_chrg"</span>,<span class="st">"er_mode"</span>,<span class="st">"obs_chrg"</span>,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"obs_hour"</span>,<span class="st">"psycchrg"</span>,<span class="st">"nicu_day"</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 49
+    yod payfix pay_ub92   age sex   raceethn provider   moa   yoa   mod admtype
+  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  
+1    18     NA        9     0 1     1        7214         1    18     1 4      
+2    18     NA        2    76 2     1        7214         1    18     1 3      
+3    18     NA        6    50 2     1        7214        12    17     1 2      
+4    18     NA        4     0 1     7        7214         1    18     1 4      
+5    18     NA       13     0 1     1        7214        12    17     1 4      
+6    18     NA        4     0 2     9        7214        12    17     1 4      
+# ℹ 38 more variables: asource &lt;chr&gt;, preopday &lt;dbl&gt;, los &lt;dbl&gt;, service &lt;chr&gt;,
+#   icu &lt;chr&gt;, ccu &lt;chr&gt;, dispub92 &lt;chr&gt;, payer &lt;chr&gt;, drg &lt;dbl&gt;, trandb &lt;chr&gt;,
+#   randbg &lt;chr&gt;, randbs &lt;chr&gt;, orr &lt;chr&gt;, anes &lt;chr&gt;, seq &lt;chr&gt;, lab &lt;chr&gt;,
+#   dtest &lt;chr&gt;, ther &lt;chr&gt;, blood &lt;chr&gt;, phar &lt;chr&gt;, other &lt;chr&gt;,
+#   patcon &lt;chr&gt;, bwght &lt;chr&gt;, total &lt;chr&gt;, tot &lt;dbl&gt;, ecodub92 &lt;chr&gt;,
+#   b_wt &lt;chr&gt;, pt_state &lt;chr&gt;, diag_adm &lt;chr&gt;, ancilar &lt;chr&gt;, campus &lt;chr&gt;,
+#   er_fee &lt;chr&gt;, er_chrg &lt;chr&gt;, er_mode &lt;chr&gt;, obs_chrg &lt;chr&gt;, …</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Write to CSV</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(df, <span class="st">"midterm.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="what-are-variables-that-have-missing-values" class="level3">
+<h3 class="anchored" data-anchor-id="what-are-variables-that-have-missing-values">5. What are variables that have missing values?</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"midterm.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 131478 Columns: 49
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (29): asource, service, icu, ccu, dispub92, payer, trandb, randbg, randb...
+dbl (18): yod, pay_ub92, age, sex, raceethn, provider, moa, yoa, mod, admtyp...
+lgl  (2): payfix, bwght
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 49
+    yod payfix pay_ub92   age   sex raceethn provider   moa   yoa   mod admtype
+  &lt;dbl&gt; &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1    18 NA            9     0     1        1     7214     1    18     1       4
+2    18 NA            2    76     2        1     7214     1    18     1       3
+3    18 NA            6    50     2        1     7214    12    17     1       2
+4    18 NA            4     0     1        7     7214     1    18     1       4
+5    18 NA           13     0     1        1     7214    12    17     1       4
+6    18 NA            4     0     2        9     7214    12    17     1       4
+# ℹ 38 more variables: asource &lt;chr&gt;, preopday &lt;dbl&gt;, los &lt;dbl&gt;, service &lt;chr&gt;,
+#   icu &lt;chr&gt;, ccu &lt;chr&gt;, dispub92 &lt;chr&gt;, payer &lt;chr&gt;, drg &lt;dbl&gt;, trandb &lt;chr&gt;,
+#   randbg &lt;chr&gt;, randbs &lt;chr&gt;, orr &lt;chr&gt;, anes &lt;chr&gt;, seq &lt;chr&gt;, lab &lt;chr&gt;,
+#   dtest &lt;chr&gt;, ther &lt;chr&gt;, blood &lt;chr&gt;, phar &lt;chr&gt;, other &lt;chr&gt;,
+#   patcon &lt;chr&gt;, bwght &lt;lgl&gt;, total &lt;chr&gt;, tot &lt;dbl&gt;, ecodub92 &lt;chr&gt;,
+#   b_wt &lt;chr&gt;, pt_state &lt;chr&gt;, diag_adm &lt;chr&gt;, ancilar &lt;chr&gt;, campus &lt;dbl&gt;,
+#   er_fee &lt;chr&gt;, er_chrg &lt;chr&gt;, er_mode &lt;dbl&gt;, obs_chrg &lt;chr&gt;, …</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(df))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     yod   payfix pay_ub92      age      sex raceethn provider      moa 
+       0   131478        0        0        0     3950        0        0 
+     yoa      mod  admtype  asource preopday      los  service      icu 
+       0        0        1        6    60486        0        0        0 
+     ccu dispub92    payer      drg   trandb   randbg   randbs      orr 
+       0        0        0        0        0        0        0        0 
+    anes      seq      lab    dtest     ther    blood     phar    other 
+       0        0        0        0        0        0        0        0 
+  patcon    bwght    total      tot ecodub92     b_wt pt_state diag_adm 
+       0   131478        0        0   104339        0        3       50 
+ ancilar   campus   er_fee  er_chrg  er_mode obs_chrg obs_hour psycchrg 
+       0        0        0        0    12158        0    77343        0 
+nicu_day 
+  124090 </code></pre>
+</div>
+</div>
+<p>Answer: <code>payfix</code>, <code>raceethn</code>, <code>admtype</code>, <code>preopday</code>, <code>bwght</code>, <code>ecodub92</code>, <code>pt_state</code>, <code>diag_adm</code>, <code>er_mode</code>, <code>obs_hour</code>, and <code>nicu_day</code> have missing values.</p>
+</section>
+<section id="remove-all-variables-with-missing-values." class="level3">
+<h3 class="anchored" data-anchor-id="remove-all-variables-with-missing-values.">6. Remove all variables with missing values.</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">"payfix"</span>, <span class="st">"raceethn"</span>, <span class="st">"admtype"</span>, <span class="st">"preopday"</span>, <span class="st">"bwght"</span>, <span class="st">"ecodub92"</span>, <span class="st">"pt_state"</span>, <span class="st">"diag_adm"</span>, <span class="st">"er_mode"</span>, <span class="st">"obs_hour"</span>, <span class="st">"nicu_day"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(df))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     yod pay_ub92      age      sex provider      moa      yoa      mod 
+       0        0        0        0        0        0        0        0 
+ asource      los  service      icu      ccu dispub92    payer      drg 
+       6        0        0        0        0        0        0        0 
+  trandb   randbg   randbs      orr     anes      seq      lab    dtest 
+       0        0        0        0        0        0        0        0 
+    ther    blood     phar    other   patcon    total      tot     b_wt 
+       0        0        0        0        0        0        0        0 
+ ancilar   campus   er_fee  er_chrg obs_chrg psycchrg 
+       0        0        0        0        0        0 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save cleaned file to CSV</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(df, <span class="st">"midterm_cleaned.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="refer-to-the-data-description-in-the-file-hdd2015-18cy6-20-19.docx-which-variable-recording-the-month-of-admission-which-variable-recording-the-month-of-discharge" class="level3">
+<h3 class="anchored" data-anchor-id="refer-to-the-data-description-in-the-file-hdd2015-18cy6-20-19.docx-which-variable-recording-the-month-of-admission-which-variable-recording-the-month-of-discharge">7. Refer to the data description in the file <code>HDD2015-18cy6-20-19.docx</code>, which variable recording the month of admission?, which variable recording the month of discharge?</h3>
+<p>Answer: <code>moa</code> is the month of admission variable, and <code>mod</code> is the month of discharge variable.</p>
+</section>
+<section id="which-month-admitted-the-most-number-of-patients-which-month-admitted-the-most-number-of-male-patients" class="level3">
+<h3 class="anchored" data-anchor-id="which-month-admitted-the-most-number-of-patients-which-month-admitted-the-most-number-of-male-patients">8. Which month admitted the most number of patients? Which month admitted the most number of male patients?</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(moa) <span class="sc">|&gt;</span> </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>n)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 2
+     moa     n
+   &lt;dbl&gt; &lt;int&gt;
+ 1    10 11408
+ 2     5 11404
+ 3     1 11309
+ 4     8 11199
+ 5     4 11174
+ 6     3 11073
+ 7     7 10962
+ 8    12 10698
+ 9     6 10690
+10     9 10666
+11    11 10636
+12     2 10259</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(moa) <span class="sc">|&gt;</span> </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>n)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 2
+     moa     n
+   &lt;dbl&gt; &lt;int&gt;
+ 1    10  5164
+ 2     5  5066
+ 3     8  5028
+ 4     4  4989
+ 5     3  4978
+ 6     1  4970
+ 7     7  4910
+ 8    12  4855
+ 9     6  4810
+10    11  4800
+11     9  4683
+12     2  4546</code></pre>
+</div>
+</div>
+<p>Answer: October admitted the most patients overall as well as male patients only.</p>
+</section>
+<section id="which-month-has-the-most-number-of-teenage-female-patients" class="level3">
+<h3 class="anchored" data-anchor-id="which-month-has-the-most-number-of-teenage-female-patients">9. Which month has the most number of teenage female patients?</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">between</span>(age, <span class="dv">13</span>,<span class="dv">19</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(moa) <span class="sc">|&gt;</span> </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>n)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 2
+     moa     n
+   &lt;dbl&gt; &lt;int&gt;
+ 1    10   355
+ 2     3   349
+ 3     5   332
+ 4     1   328
+ 5     4   315
+ 6    12   310
+ 7     2   297
+ 8    11   295
+ 9     9   288
+10     6   279
+11     8   278
+12     7   277</code></pre>
+</div>
+</div>
+<p>Answer: October also has the most teenage female admittances.</p>
+</section>
+<section id="which-provider-has-the-most-number-of-female-patients-in-october" class="level3">
+<h3 class="anchored" data-anchor-id="which-provider-has-the-most-number-of-female-patients-in-october">10. Which provider has the most number of female patients in October?</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="dv">2</span> <span class="sc">&amp;</span> moa <span class="sc">==</span> <span class="dv">10</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(provider) <span class="sc">|&gt;</span> </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>n)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 2
+   provider     n
+      &lt;dbl&gt; &lt;int&gt;
+ 1     7205  1517
+ 2     7214  1224
+ 3     7204   872
+ 4     7210   699
+ 5     7209   351
+ 6     7206   333
+ 7     7213   317
+ 8     7201   294
+ 9     7216   256
+10     7202   212
+11     7211   122
+12     7215    46</code></pre>
+</div>
+</div>
+<p>Answer: Provider <code>7205</code> has the most female patients in October.</p>
+</section>
+<section id="are-female-patients-older-than-male-patients-on-average" class="level3">
+<h3 class="anchored" data-anchor-id="are-female-patients-older-than-male-patients-on-average">11. Are female patients older than male patients, on average?</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span> </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">average_age =</span>  <span class="fu">mean</span>(age)) <span class="sc">|&gt;</span> </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>average_age)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+    sex average_age
+  &lt;dbl&gt;       &lt;dbl&gt;
+1     1        51.5
+2     2        50.9
+3     9        43  </code></pre>
+</div>
+</div>
+<p>Answer: Male patients are older than female patients on average.</p>
+</section>
+<section id="calculate-the-average-age-of-patients-by-months.-which-month-has-the-oldest-patients-on-average-age" class="level3">
+<h3 class="anchored" data-anchor-id="calculate-the-average-age-of-patients-by-months.-which-month-has-the-oldest-patients-on-average-age">12. Calculate the average age of patients by months. Which month has the oldest patients on average age?</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(moa) <span class="sc">|&gt;</span> </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">average_age =</span> <span class="fu">mean</span>(age)) <span class="sc">|&gt;</span> </span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>average_age)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 2
+     moa average_age
+   &lt;dbl&gt;       &lt;dbl&gt;
+ 1     1        51.8
+ 2     6        51.5
+ 3    12        51.5
+ 4     4        51.4
+ 5     7        51.3
+ 6     2        51.2
+ 7     3        51.1
+ 8    11        51.0
+ 9     8        50.9
+10    10        50.8
+11     5        50.6
+12     9        50.6</code></pre>
+</div>
+</div>
+<p>Answer: January has the oldest patients on average.</p>
+</section>
+<section id="what-is-the-name-of-the-provider-that-has-the-highest-total-charge" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-the-name-of-the-provider-that-has-the-highest-total-charge">13. What is the name of the provider that has the highest total charge?</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(provider) <span class="sc">|&gt;</span> </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">average_total_charge =</span> <span class="fu">mean</span>(tot)) <span class="sc">|&gt;</span> </span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>average_total_charge)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 2
+   provider average_total_charge
+      &lt;dbl&gt;                &lt;dbl&gt;
+ 1     7215               69946.
+ 2     7205               48739.
+ 3     7213               38200.
+ 4     7202               35504.
+ 5     7204               35277.
+ 6     7206               31018.
+ 7     7210               27691.
+ 8     7209               24539.
+ 9     7211               24089.
+10     7201               22775.
+11     7214               22362.
+12     7216               17782.</code></pre>
+</div>
+</div>
+<p>Answer: Provider <code>7215</code> has the hightest average total charge.</p>
+</section>
+<section id="what-is-the-name-of-the-provider-that-has-the-least-total-charge-for-teenage-male-on-average" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-the-name-of-the-provider-that-has-the-least-total-charge-for-teenage-male-on-average">14. What is the name of the provider that has the least total charge for teenage male on average?</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> <span class="fu">between</span>(age, <span class="dv">13</span>, <span class="dv">19</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(provider) <span class="sc">|&gt;</span> </span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">average_total_charge =</span> <span class="fu">mean</span>(tot)) <span class="sc">|&gt;</span> </span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(average_total_charge)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 2
+   provider average_total_charge
+      &lt;dbl&gt;                &lt;dbl&gt;
+ 1     7206               10360.
+ 2     7201               14434.
+ 3     7210               18586.
+ 4     7211               19742.
+ 5     7213               22618.
+ 6     7216               24060.
+ 7     7204               24989.
+ 8     7209               26573.
+ 9     7214               28950 
+10     7202               29389.
+11     7205               40215.
+12     7215              100440.</code></pre>
+</div>
+</div>
+<p>Answer: Provider <code>7206</code> has the lowest average total charge for teenage male patients.</p>
+</section>
+<section id="create-a-season-spring-summer-fall-winter-variable.-calculate-the-length-of-stays-by-season.-which-season-has-the-longest-length-of-stays-on-average" class="level3">
+<h3 class="anchored" data-anchor-id="create-a-season-spring-summer-fall-winter-variable.-calculate-the-length-of-stays-by-season.-which-season-has-the-longest-length-of-stays-on-average">15. Create a season (Spring, Summer, Fall, Winter) variable. Calculate the length of stays by season. Which season has the longest length of stays on average?</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create season variable</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>season <span class="ot">&lt;-</span> <span class="fu">case_when</span>(df<span class="sc">$</span>moa <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">1</span>, <span class="dv">2</span>) <span class="sc">~</span> <span class="st">"Winter"</span>,</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>                       df<span class="sc">$</span>moa <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">~</span> <span class="st">"Spring"</span>,</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>                       df<span class="sc">$</span>moa <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>) <span class="sc">~</span> <span class="st">"Summer"</span>,</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>                       df<span class="sc">$</span>moa <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>) <span class="sc">~</span> <span class="st">"Fall"</span>)</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 39
+    yod pay_ub92   age   sex provider   moa   yoa   mod asource   los service
+  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  
+1    18        9     0     1     7214     1    18     1 S           2 00     
+2    18        2    76     2     7214     1    18     1 1           1 00     
+3    18        6    50     2     7214    12    17     1 1           3 00     
+4    18        4     0     1     7214     1    18     1 S           4 00     
+5    18       13     0     1     7214    12    17     1 S          35 00     
+6    18        4     0     2     7214    12    17     1 T          17 00     
+# ℹ 28 more variables: icu &lt;chr&gt;, ccu &lt;chr&gt;, dispub92 &lt;chr&gt;, payer &lt;chr&gt;,
+#   drg &lt;dbl&gt;, trandb &lt;chr&gt;, randbg &lt;chr&gt;, randbs &lt;chr&gt;, orr &lt;chr&gt;, anes &lt;chr&gt;,
+#   seq &lt;chr&gt;, lab &lt;chr&gt;, dtest &lt;chr&gt;, ther &lt;chr&gt;, blood &lt;chr&gt;, phar &lt;chr&gt;,
+#   other &lt;chr&gt;, patcon &lt;chr&gt;, total &lt;chr&gt;, tot &lt;dbl&gt;, b_wt &lt;chr&gt;,
+#   ancilar &lt;chr&gt;, campus &lt;dbl&gt;, er_fee &lt;chr&gt;, er_chrg &lt;chr&gt;, obs_chrg &lt;chr&gt;,
+#   psycchrg &lt;chr&gt;, season &lt;chr&gt;</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(season) <span class="sc">|&gt;</span> </span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">avg_length_of_stays =</span> <span class="fu">mean</span>(los)) <span class="sc">|&gt;</span> </span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>avg_length_of_stays)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  season avg_length_of_stays
+  &lt;chr&gt;                &lt;dbl&gt;
+1 Summer                4.96
+2 Fall                  4.96
+3 Winter                4.93
+4 Spring                4.84</code></pre>
+</div>
+</div>
+<p>Answer: Summer has the highest average length of stays.</p>
+</section>
+<section id="on-average-how-much-a-20-year-old-male-get-charged-for-staying-1-day-in-the-fall-season" class="level3">
+<h3 class="anchored" data-anchor-id="on-average-how-much-a-20-year-old-male-get-charged-for-staying-1-day-in-the-fall-season">16. On average, how much a 20 year-old male get charged for staying 1 day in the Fall season?</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(age <span class="sc">==</span> <span class="dv">20</span> <span class="sc">&amp;</span> sex <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> los <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> season <span class="sc">==</span> <span class="st">"Fall"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(season) <span class="sc">|&gt;</span> </span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">avg_charge =</span> <span class="fu">mean</span>(tot))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  season avg_charge
+  &lt;chr&gt;       &lt;dbl&gt;
+1 Fall        16511</code></pre>
+</div>
+</div>
+<p>Answer: On average, a 20-year old male gets charged $16,511 for staying 1 day in the fall season.</p>
+</section>
+<section id="write-a-paragraph-to-summarize-the-section-and-give-your-comments-on-the-results.-you-could-do-some-other-calculations-to-support-your-points." class="level3">
+<h3 class="anchored" data-anchor-id="write-a-paragraph-to-summarize-the-section-and-give-your-comments-on-the-results.-you-could-do-some-other-calculations-to-support-your-points.">17. Write a paragraph to summarize the section and give your comments on the results. You could do some other calculations to support your points.</h3>
+<p>(paragraph here)</p>
+</section>
+</section>
+<section id="part-2-data-visualization" class="level1">
+<h1>Part 2: Data Visualization</h1>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
