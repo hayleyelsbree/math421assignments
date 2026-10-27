@@ -31,7 +31,7 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 ```{r}
 library(caret)
 library(tidyverse)
-df <- read_csv("C:\\Users\\student\\Downloads\\PimaIndiansDiabetes.csv")
+df <- read_csv("PimaIndiansDiabetes.csv")
 head(df)
 ```
 
@@ -39,11 +39,15 @@ head(df)
 # Cleaning
 df <- df |> rename(target = diabetes)
 
+df$target <- as.factor(unlist(df$target))
+
 colSums(is.na(df))
 ```
 
 ```{r}
 # Split Data into Training and Testing
+set.seed(42)
+
 splitIndex <- createDataPartition(df$target, p = 0.70, list = FALSE)
 
 df_train <- df[ splitIndex,]
@@ -55,13 +59,10 @@ Train and Test a decision tree and a random forest with caret. Plot the variable
 
 ```{r}
 # Decision Tree
-test_target_factor <- factor(df_test$target, levels = c("neg", "pos"))
-
-
 dt <- train(target~., data = df_train, method = "rpart2", maxdepth = 3)
 pred <- predict(dt, df_test)
 
-cm <- confusionMatrix(data = pred, reference = test_target_factor, positive = "pos")
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
 
 cm$overall[1]
 ```
@@ -79,7 +80,7 @@ rf <- train(target~., data = df_train, method = "rf", ntree = 1000)
 pred <- predict(rf, df_test)
 
 
-cm <- confusionMatrix(data = pred, reference = test_target_factor, positive = "pos")
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
 
 cm$overall[1]
 ```
@@ -100,7 +101,7 @@ library(glmnet)
 glmnet <- train(target~., data = df_train, method = "glmnet")
 pred <- predict(glmnet, df_test)
 
-cm = confusionMatrix(data = pred, reference = test_target_factor, positive = "pos")
+cm = confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
 
 cm$overall[1]
 ```
@@ -115,35 +116,15 @@ plot(varImp(glmnet))
 3. Train and test two models that are not `ranger`, `glmnet` or `rpart`  with caret. If possible, plot the variable importance of the model. 
 
 ```{r}
-# Model 1: `ada`
-library(fastAdaboost)
+# Model 1: `knn`
+df_train <- as.data.frame(df_train) # changing data type from tibble to data frame to plot variable importance
 
-ada <- train(target~., data = df_train, method = "adaboost", iter = 10)
-pred <- predict(ada, df_test)
+# tibble handles column indexing differently than data frames, so when extracting variable importance, it accidentally extracts outcome variable as a 1 column list rather than flat vector
 
-cm = confusionMatrix(data = pred, reference = test_target_factor, positive = "pos")
+knn <- train(target~., data = df_train, method = "knn")
+pred <- predict(knn, df_test)
 
-cm$overall[1]
-```
-
-
-```{r}
-# Plot Importance
-plot(varImp(ada))
-```
-
-
-```{r}
-# Model 2: `xgbTree`
-library(xgboost)
-df_train$target <- factor(df_train$target, 
-                          levels = c(0, 1), 
-                          labels = c("neg", "pos"))
-
-xgb <- train(target~., data = df_train, method = "xgbTree", nrounds = 50)
-pred <- predict(xgb, df_test)
-
-cm = confusionMatrix(data = pred, reference = test_target_factor, positive = "pos")
+cm = confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
 
 cm$overall[1]
 ```
@@ -151,6 +132,28 @@ cm$overall[1]
 
 ```{r}
 # Plot Importance
-plot(varImp(xgb))
+importance_knn <- varImp(knn)
+plot(importance_knn)
+```
+
+
+```{r}
+# Model 2: `LogitBoost`
+
+# boosted logistic regression is an additive model that minimizes the negative log-likelihood (log loss)
+library(caTools)
+
+logistic <- train(target~., data = df_train, method = "LogitBoost")
+pred <- predict(logistic, df_test)
+
+cm = confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
+
+cm$overall[1]
+```
+
+
+```{r}
+# Plot Importance
+plot(varImp(logistic))
 ```
 
