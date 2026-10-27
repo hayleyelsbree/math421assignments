@@ -119,7 +119,6 @@ knn$bestTune
 cm$overall[1]
 
 ```
-**Answer: ** The best parameter found was `k = 12`, which produced an accuracy of 0.6869565.
 
 3. (Model Comparison) Use the `PimaIndiansDiabetes` dataset. Pick two models at [this link](https://topepo.github.io/caret/available-models.html) to compare using 7-fold cross validation method. Evaluate the accuracy of the final model on the test data. 
 
