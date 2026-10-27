@@ -27,27 +27,127 @@ knitr::opts_chunk$set(message = FALSE)
 1. Use the `PimaIndiansDiabetes` dataset. Use 15% data for testing. Use cross-validation with of 7 folds to tune random forest `(method='ranger')`.  What are the parameters that produce the greatest accuracy? What is the testing accuracy. 
 
 ```{r}
-# Random Forest (CV - 7 folds)
+# Read in data
+library(caret)
+library(tidyverse)
+df <- read_csv("PimaIndiansDiabetes.csv")
+
+# Cleaning
+df <- df |> rename(target = diabetes)
+df$target <- as.factor(df$target)
+colSums(is.na(df))
 ```
 
+```{r}
+# Train-Test Split
+set.seed(42)
+splitIndex <- createDataPartition(df$target, p = 0.85, list = FALSE)
+
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+```
+
+
+```{r}
+# Setting up CV with 7 folds
+trControl = trainControl(method = "cv", 
+                         number = 7)
+```
+
+
+```{r}
+# Check what parameters to tune
+getModelInfo('ranger')$ranger$parameters
+```
+
+
+```{r}
+# Random Forest - Ranger Method (CV - 7 folds)
+
+tuneGrid = expand.grid(mtry = 2:4,
+                       splitrule = c("gini", "extratrees"),
+                       min.node.size = c(1:10))
+
+forest_ranger <- train(target~., data = df_train,
+                       method = "ranger",
+                       trControl = trControl,
+                       tuneGrid = tuneGrid)
+
+pred <- predict(forest_ranger, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
+
+
+plot(forest_ranger)
+
+forest_ranger$bestTune
+
+cm$overall[1]
+
+```
+**Answer: ** The best parameters found were `mtry = 4`, `splitrule = extratrees`, and `min.node.size = 7`. The accuracy of this model is 0.7565217.
 
 2. Use the `PimaIndiansDiabetes` dataset. Go to https://topepo.github.io/caret/available-models.html and pick a classification model.  Tune the classification model using cross-validation of 7 folds. 
 
 ```{r}
-# Classification Model (CV - 7 folds)
+# Check what knn parameters to tune
+getModelInfo('knn')$knn$parameters
 ```
 
+```{r}
+sqrt(nrow(df))
+```
+
+```{r}
+# Classification Model (CV - 7 folds)
+tuneGrid = expand.grid(k = 1:27) # upper bound of sqrt of # of observations as starting point
+
+knn <- train(target~., data = df_train,
+                       method = "knn",
+                       trControl = trControl,
+                       tuneGrid = tuneGrid)
+
+pred <- predict(knn, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
+
+
+plot(knn)
+
+knn$bestTune
+
+cm$overall[1]
+
+```
+**Answer: ** The best parameter found was `k = 12`, which produced an accuracy of 0.6869565.
 
 3. (Model Comparison) Use the `PimaIndiansDiabetes` dataset. Pick two models at [this link](https://topepo.github.io/caret/available-models.html) to compare using 7-fold cross validation method. Evaluate the accuracy of the final model on the test data. 
 
 
 ```{r}
-# Model 1
+# Model Comparison
+library(caTools)
+tree <- train(target~., data = df_train,
+                       method = "rpart2",
+                       trControl = trControl)
 
+boost_logistic <- train(target~., data = df_train,
+                       method = "LogitBoost",
+                       trControl = trControl)
+
+results <- resamples(list("Decision Tree" = tree,
+                          "Boosted Logistic Regression" = boost_logistic))
+
+bwplot(results)
 ```
 
 
 ```{r}
-# Model 2
+# Evaluate best model on testing data
+pred <- predict(tree, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "pos")
+
+cm$overall[1]
 ```
 
