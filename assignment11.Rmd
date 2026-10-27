@@ -39,7 +39,7 @@ head(df)
 # Cleaning
 df <- df |> rename(target = diabetes)
 
-df$target <- as.factor(unlist(df$target))
+df$target <- as.factor(df$target)
 
 colSums(is.na(df))
 ```

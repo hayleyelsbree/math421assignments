@@ -387,7 +387,7 @@ head(df)</code></pre>
 <pre class="r"><code># Cleaning
 df &lt;- df |&gt; rename(target = diabetes)
 
-df$target &lt;- as.factor(unlist(df$target))
+df$target &lt;- as.factor(df$target)
 
 colSums(is.na(df))</code></pre>
 <pre><code>## pregnant  glucose pressure  triceps  insulin     mass pedigree      age 
