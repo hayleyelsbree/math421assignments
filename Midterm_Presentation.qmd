@@ -34,19 +34,7 @@ theme: serif
 
 ## Gender
 
-:::: {.columns}
-
-::: {.column width="50%"}
-* There are more females in the dataset than males.
-
-:::
-
-::: {.column width="50%"}
-
 ![](midterm_plot2.png)
-:::
-
-::::
 
 ## Cost Distribution
 
@@ -85,20 +73,8 @@ theme: serif
 
 ## Age vs. Cost
 
-:::: {.columns}
-
-::: {.column width="50%"}
-
 ![](midterm_plot5.png)
 
-:::
-
-::: {.column width="50%"}
-* There is a slight increase in cost as patient age increases.
-
-:::
-
-::::
 
 ## Cost by Race/Ethnicity
 :::: {.columns}
