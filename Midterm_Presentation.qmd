@@ -151,23 +151,10 @@ theme: serif
 
 
 ## Average Monthly Cost
-
-:::: {.columns}
-
-::: {.column width="50%"}
 * August has the highest average cost
 * Drastic fluctuations month to month
 
-:::
-
-::: {.column width="50%"}
-
 ![](midterm_plot9.png)
-:::
-
-::::
-
-
 
 ## Average Monthly Cost by Provider
 :::: {.columns}
