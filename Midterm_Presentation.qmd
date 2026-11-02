@@ -15,21 +15,8 @@ theme: serif
 # 1. Understanding Data through Visuals
 
 ## Age
-:::: {.columns}
-
-::: {.column width="50%"}
 
 ![](midterm_plot1.png)
-
-:::
-
-::: {.column width="50%"}
-* Age is bimodally distributed
-* Peaks at newborn (age = 0) and older adults
-
-:::
-
-::::
 
 
 ## Gender
