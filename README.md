@@ -34,3 +34,7 @@
 [Assignment 11](assignment11.html)
 
 [Assignment 12](assignment12.html)
+
+[Midterm Code](Midterm_Code.html)
+
+[Midterm Presentation](Midterm_Presentation.html)
