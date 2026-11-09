@@ -312,23 +312,42 @@ df <- df |> mutate(Survived = factor(Survived),
              Sex = factor(Sex),
              Embarked = factor(Embarked),
              Ticket = factor(Ticket),
-             Cabin = factor(Cabin)) 
+             Cabin = factor(Cabin))
 
-  # Handle missing values
-  #mutate(
-   # Age = ifelse(is.na(Age), mean(Age, na.rm = TRUE), Age),
-    #Embarked = ifelse(is.na(Embarked) | Embarked == "", "S", as.character(Embarked)),
-    #Embarked = factor(Embarked)
- # ) %>%
-  # Select relevant columns and remove rows with NAs
-  #select(Survived, Pclass, Sex, Age, SibSp, Parch, Fare, Embarked) %>%
-  #na.omit() %>%
-  # Rename Survived to target
-  #rename(target = Survived)
+df <- df |> drop_na()
 
-#head(titanic_clean)
+df_model <- df |> select(Survived, Pclass, Sex, Age, SibSp, Parch, Fare, Embarked) |> rename(target = Survived)
 ```
 
+```{r}
+# Function
+accuracy <- function(df, train_percent = 0.8)
+{
+  library(caret)
+  set.seed(00000)
+  splitIndex <- createDataPartition(df$target, p = train_percent, 
+                                    list = FALSE)
+  df_train <- df[ splitIndex,]
+  df_test <- df[-splitIndex,]
+  
+  library(rpart)
+  tree1<-rpart(target ~ ., 
+               data = df_train)
+  pred <- predict(tree1, df_test, type = "class")
+  cm <- confusionMatrix(data = pred, reference = df_test$target)
+  return(cm$overall[1])
+}
+```
+
+
+```{r}
+# Example: default train %
+accuracy(df_model)
+```
+```{r}
+# Example: set train %
+accuracy(df_model, 0.7)
+```
 
 -------
 
@@ -342,6 +361,35 @@ df <- df |> mutate(Survived = factor(Survived),
 
 - Output: the plot of variable important by random forest trained by caret. 
 
+```{r}
+# Function
+var_imp <- function(df, train_percent = 0.8)
+{
+  library(caret)
+  set.seed(00000)
+  splitIndex <- createDataPartition(df$target, p = train_percent, 
+                                    list = FALSE)
+  df_train <- df[ splitIndex,]
+  df_test <- df[-splitIndex,]
+  
+  library(rpart)
+  tree1<-rpart(target ~ ., 
+               data = df_train)
+  pred <- predict(tree1, df_test, type = "class")
+  cm <- confusionMatrix(data = pred, reference = df_test$target)
+  return(barplot(tree1$variable.importance))
+}
+```
+
+```{r}
+# Example: default train %
+var_imp(df_model)
+```
+
+```{r}
+# Example: set train %
+var_imp(df_model, 0.7)
+```
 
 ---
 9. Write the following function. Give examples to test your function. 
@@ -360,4 +408,25 @@ Sample codes
 
 - [A similar function](https://bryantstats.github.io/math421/gganimate/17_writing_functions.html#10)
 
+```{r}
+# Function
+library(wordcloud)
+library(tidytext)
+library(RColorBrewer)
+
+wordcloud <- function(df, column)
+{
+  pal <- brewer.pal(8, "Dark2")
+  df |> unnest_tokens(input = !!sym(column), output = word) |> 
+        anti_join(get_stopwords()) |> 
+        count(word, sort = TRUE) |> 
+        with(wordcloud::wordcloud(word, n, random.order = FALSE, max.words = 50, colors = pal))
+}
+```
+
+```{r}
+# Example
+ds_salaries <- read_csv("ds_salaries.csv")
+wordcloud(ds_salaries, "job_title")
+```
 
