@@ -44,7 +44,6 @@ head(df)
 colSums(is.na(df))
 ```
 
-
 ```{r}
 # Write to CSV
 write_csv(df, "midterm.csv")
@@ -75,8 +74,8 @@ df <- df |> select(-c("payfix", "preopday", "obs_hour", "nicu_day"))
 # Verify
 colSums(is.na(df))
 ```
-(The columns I wanted to dropped were successfully dropped.)
 
+(The columns I wanted to dropped were successfully dropped.)
 
 ```{r}
 # Save cleaned file to CSV
@@ -132,7 +131,6 @@ Answer: Rhode Island Hospital (7205) has the most female patients in October.
 df <- df |> filter(sex != 9)
 df |> count(sex)
 ```
-
 
 ```{r}
 df |> 
@@ -207,13 +205,12 @@ df |>
   group_by(season) |> 
   summarise(avg_charge = mean(tot))
 ```
-  
 
 Answer: On average, a 20-year old male gets charged $16,511 for staying 1 day in the fall season.
 
 ### 17. Write a paragraph to summarize the section and give your comments on the results. You could do some other calculations to support your points.
 
-There are many findings from the hospitalization dataset found from this data wrangling. For example, we got a better idea of the scope of the dataset. For example, we learned that there are more females patients in the dataset than males, but that males are of higher age than females. Additionally, October seems to be the most frequent month for being admitted, because it is the month with the most patients admitted overall as well as by male only. The average total cost of a hospital visit at a provider is at most $69,945.55 at Bradley, but the most common provider is not Bradley but rather Rhode Island Hospital (see below code chunk). Based on the seasonality analysis, summer and fall are roughly the same in terms of average length of a stay, however there is not much variation by season, demonstrating that season might not influence the length of stay for a patient as much as another variable might. There is still much more analysis that could be done, which will be explored in the Data Visualization section of the project.
+There are many findings from the hospitalization dataset found from this data wrangling. For example, we got a better idea of the scope of the dataset. For example, we learned that there are more females patients in the dataset than males, but that males are of higher age than females. Additionally, October seems to be the most frequent month for being admitted, because it is the month with the most patients admitted overall as well as by male only. The average total cost of a hospital visit at a provider is at most \$69,945.55 at Bradley, but the most common provider is not Bradley but rather Rhode Island Hospital (see below code chunk). Based on the seasonality analysis, summer and fall are roughly the same in terms of average length of a stay, however there is not much variation by season, demonstrating that season might not influence the length of stay for a patient as much as another variable might. There is still much more analysis that could be done, which will be explored in the Data Visualization section of the project.
 
 ```{r}
 # Most COmmon Provider Overall
@@ -222,10 +219,10 @@ df |>
   arrange(-n)
 ```
 
-
 # Part 2: Data Visualization
 
 ### Plot 1: Age Distribution
+
 ```{r}
 plot1 <- df |> ggplot() + 
                 geom_histogram(mapping = aes(x = age)) +
@@ -243,9 +240,8 @@ df$sex_name <- case_when(df$sex ==  1 ~ "Male",
                          df$sex ==  2 ~ "Female")
 ```
 
-
 ```{r}
-plot2 <- df |> ggplot() + 
+df |> ggplot() + 
           geom_bar(mapping = aes(x = sex_name, fill = sex_name)) + 
           scale_fill_manual(values = c("Male" = "lightblue", "Female" = "pink")) +
           theme(legend.position = "none") + 
@@ -253,7 +249,7 @@ plot2 <- df |> ggplot() +
                y = 'Count',
                title = 'Sex Distribution',
                caption = 'There are more female patients in the dataset than male patients.')
-ggsave(filename = 'midterm_plot2.png', plot = plot2)
+# ggsave(filename = 'midterm_plot2.png', plot = plot2)
 ```
 
 ### Plot 3: Cost Distribution
@@ -268,7 +264,6 @@ plot3 <- df |> ggplot() +
 ggsave(filename = 'midterm_plot3.png', plot = plot3)
 ```
 
-
 ### Plot 4: Cost by Gender
 
 ```{r}
@@ -280,7 +275,6 @@ plot4 <- df |> ggplot() +
                caption = 'The total cost for both male and female has extreme outliers, but females have the most extreme outlier in the dataset.')
 ggsave(filename = 'midterm_plot4.png', plot = plot4)
 ```
-
 
 ### Plot 5: Patient Age versus Total Cost
 
@@ -312,7 +306,6 @@ df$race_name <- case_when(df$raceethn == 1 ~ "White",
 
 ```
 
-
 ```{r}
 plot6 <- df |> 
             filter(!is.na(race_name)) |> 
@@ -326,7 +319,6 @@ plot6 <- df |>
 ggsave(filename = 'midterm_plot6.png', plot = plot6)
 ```
 
-
 ### Plot 7: Length of Stay Distribution
 
 ```{r}
@@ -338,11 +330,12 @@ plot7 <- df |> ggplot() +
                caption = 'Patient length of stay is heavily skewed right, with a max stay of 528 days .')
 ggsave(filename = 'midterm_plot7.png', plot = plot7)
 ```
+
 ```{r}
 summary(df$los)
 ```
 
-### Plot 8:  Monthly Admissions by Ethnicity
+### Plot 8: Monthly Admissions by Ethnicity
 
 ```{r}
 plot8 <- df |> 
@@ -358,11 +351,10 @@ plot8 <- df |>
 ggsave(filename = 'midterm_plot8.png', plot = plot8)
 ```
 
-
 ### Plot 9: Average Monthly Cost
 
 ```{r}
-plot9 <-  df |> 
+df |> 
             group_by(moa) |> 
             summarise(avg_cost = mean(tot, na.rm = TRUE)) |> 
             ggplot(aes(x = moa, y = avg_cost)) +
@@ -371,11 +363,16 @@ plot9 <-  df |>
                  y = "Average Cost",
                  title = "Average Cost by Month",
                  caption = "There are drastic fluctuations in the average cost over time.")
-ggsave(filename = 'midterm_plot9.png', plot = plot9)
+# ggsave(filename = 'midterm_plot9.png', plot = plot9)
 ```
 
-
-
+```{r}
+# Code Defense
+df |> 
+  group_by(diag_adm, sex_name) |> 
+  summarise(avg_cost = mean(tot, na.rm = TRUE)) |> 
+  arrange(-avg_cost)
+```
 
 
 ### Plot 10: Average Monthly Cost by Provider
@@ -383,7 +380,6 @@ ggsave(filename = 'midterm_plot9.png', plot = plot9)
 ```{r}
 df$provider <- as.factor(df$provider)
 ```
-
 
 ```{r}
 plot10 <- df |> 
@@ -398,10 +394,10 @@ plot10 <- df |>
                  caption = "Most providers have similar average monthly costs, but Bradley consistently has the highest average cost.")
 ggsave(filename = 'midterm_plot10.png', plot = plot10)
 ```
+
 ```{r}
 df |> group_by(moa, provider) |> summarise(avg_cost = mean(tot, na.rm = TRUE)) |> arrange(-avg_cost)
 ```
-
 
 ### Animated Plot: Admissions by Month by Sex
 
@@ -423,11 +419,13 @@ anim_save('midterm_animated.gif', animation = animated)
 ```
 
 ### Write a paragraph to summarize the section and give your comments on the results.
+
 From this exercise, I learned that a lot of data storytelling is done through visualizations. It is important to understand the data you are working with by getting statistics on the demographics of the patients. From that, I learned that there are more females than males in the dataset and that the age is bimodally distributed. I also learned that the cost and length of stays are heavily skewed right. Once basic charts are complete, you can get into more complex ideas. I focused on cost because I wanted to see if one gender or race was targeted cost-wise, but based on the analyses, there is no evidence to support that idea. I also wanted to look at the monthly trends, and saw that while there are large fluctuations in the average monthly cost, there aren't huge differences in cost between providers. With the wide array of variables to choose from, this analysis could be taken much further, but I wanted to narrow in on cost trends.
 
 # Part 3: Predictive Models
 
 ### 1. Use `filter` function to filter out rows where `raceethn==''` or `admtype==''`. Make sure all the categorical variables are factor, numeric variables are numeric. Set Training : Testing Split = 10 : 90
+
 ```{r}
 # Filter
 df <- df |> filter(raceethn != '' & admtype != '')
@@ -448,7 +446,6 @@ df$target <- case_when(df$tot < median ~ "Low",
                        df$tot >= median ~ "High")
 ```
 
-
 ```{r}
 # Set character datatypes to factors
 df <- df |> mutate(across(where(is.character), as.factor))
@@ -460,7 +457,6 @@ str(df)
 df_model <- df |> select(c("age","sex","raceethn","provider","moa","mod","admtype","campus","los","target"))
 ```
 
-
 ```{r}
 # Train/Test Split
 library(caret)
@@ -470,7 +466,6 @@ splitIndex <- createDataPartition(df_model$target, p = .90,
 df_train <- df_model[ splitIndex,]
 df_test <- df_model[-splitIndex,]
 ```
-
 
 ### 2. Train a decision tree using `rpart`. Plot the decision tree. Plot the variable importance ranked by the tree.
 
@@ -501,11 +496,9 @@ training_control <- trainControl(method = "cv", number = 5)
 df_train_sample <- df_train |> slice_sample(n = 15000)
 ```
 
-
 ```{r}
 str(df)
 ```
-
 
 ```{r}
 # Model 1: Random Forest
@@ -521,7 +514,6 @@ model_rf <- train(target ~.,
 plot(model_rf)
 ```
 
-
 ```{r}
 # Model 2: KNN
 model_knn <- train(target ~.,
@@ -536,7 +528,6 @@ model_knn <- train(target ~.,
 plot(model_knn)
 ```
 
-
 ### 4. Plot the comparison of the models in 3.
 
 ```{r}
@@ -548,7 +539,6 @@ bwplot(results)
 dev.off()
 ```
 
-
 ### 5. What is your final selection for the model? Test the accuracy of your final model on the test data.
 
 ```{r}
@@ -558,7 +548,6 @@ cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "High"
 
 cm$overall[1]
 ```
-
 
 ### 6. Create another `target` variable (binary), decide the input variables and redo 1 to 5.
 
@@ -593,7 +582,6 @@ df_train <- df_model_2[ splitIndex,]
 df_test <- df_model_2[-splitIndex,]
 ```
 
-
 ```{r}
 # Train Model
 library(rpart)
@@ -620,8 +608,6 @@ training_control <- trainControl(method = "cv", number = 5)
 df_train_sample <- df_train |> slice_sample(n = 15000)
 ```
 
-
-
 ```{r}
 # Model 1: Random Forest
 model_rf <- train(target ~.,
@@ -636,7 +622,6 @@ model_rf <- train(target ~.,
 plot(model_rf)
 ```
 
-
 ```{r}
 # Model 2: KNN
 model_knn <- train(target ~.,
@@ -650,7 +635,6 @@ model_knn <- train(target ~.,
 # Model 2 Variable Importance
 plot(model_knn)
 ```
-
 
 ```{r}
 # Model Comparison
@@ -672,4 +656,5 @@ cm$overall[1]
 ```
 
 ### Write a paragraph to summarize the section and give your comments on the results.
+
 Modeling on cost was very interesting, especially when we compare the decision tree to the random forest and KNN models. The decision tree is a great basic model that is easy to interpret, but lacks at finding the true patterns in the data. However, its simplicity and easy-to-follow diagram makes it easy to conceptualize. Comparing the random forest to KNN is interesting because a random forest is an eager learner whereas KNN is a lazy learner. The random forest performed better, likely because of the "eager learning" where it spends much time training on the data to make more accurate predictions in the testing phase. I then chose to try and predict the Month of Admittance for the second phase of modeling, but I kept the same input variables as before. While this gave me great results in both the random forest and KNN models, I need to make a more educated decision on what variables to model on because I think the MOD is too highly correlated with MOA. However, I do believe this experience was needed to teach me the importance of variable selection in the modeling process and I intentionally left it in the project to bring up such point. Overall, the random forest model is unsurprisingly the better predictor, but if I used gradient boosting or ada boosting, it would be a much more interesting (but time consuming) comparison.
