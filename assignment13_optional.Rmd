@@ -271,6 +271,7 @@ all_viz(d)
 
 
 ```{r}
+# Example: x is categorical, y is numeric
 d <- df |> select(Sex, Fare)
 all_viz(d)
 ```
