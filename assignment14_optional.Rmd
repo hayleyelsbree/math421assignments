@@ -146,6 +146,21 @@ colSums(is.na(d2))
 Hint: [Similar function](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#33)
 
 ```{r}
+# Clean Titanic Dataset
+df <- df |> mutate(Survived = factor(Survived),
+             Pclass = factor(Pclass),
+             Sex = factor(Sex),
+             Embarked = factor(Embarked),
+             Ticket = factor(Ticket),
+             Cabin = factor(Cabin))
+
+df <- df |> drop_na()
+
+df_clean <- df |> select(Survived, Pclass, Sex, Age, SibSp, Parch, Fare, Embarked)
+```
+
+
+```{r}
 # Function
 bar_plot <- function(d)
 {
@@ -153,16 +168,18 @@ bar_plot <- function(d)
   {
     if (!is.numeric(d[[i]]))
     {
-      print(ggplot() + geom_bar(mapping = aes(x = d[[i]]))+ 
-              geom_density()+
+      print(ggplot(d) + 
+              geom_bar(mapping = aes(x = d[[i]])) + 
               labs(x = names(d)[i]))
-      
-      d |> ggplot() + geom_bar(mapping = aes(x = d[[1]], fill = d[[2]],), position = 'fill')+labs(x = names(d)[1], fill = names(d)[2])
     }
   }
 }
 ```
 
+```{r}
+# Example
+bar_plot(df_clean)
+```
 
 -------
 
@@ -173,6 +190,29 @@ bar_plot <- function(d)
 - Output: all possible the bar plots of a non-numeric variable filled by a non-numeric variable.
 
 Hint: [Similar function](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#40)
+
+```{r}
+# Function
+bar_plot2 <- function(d)
+{
+  l <- length(d)
+  for (i in 1:(l-1))
+    for (j in (i+1):l)
+  {
+    if (!is.numeric(d[[i]])& (!is.numeric(d[[j]])))
+    {
+      print(ggplot(d, aes(x = d[[i]], fill = d[[j]]))+ 
+              geom_bar()+labs(x = names(d)[i], fill = names(d)[j]))
+    }
+  }
+}
+```
+
+```{r}
+# Example
+bar_plot2(df_clean)
+```
+
 
 -------
 
@@ -189,4 +229,68 @@ Hint: [Similar function](https://bryantstats.github.io/math421/gganimate/18_writ
   - all possible the scatter plots.
 
 Hint: Combine [this function](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#37), [this function](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#40), and the function in Question 4. One way to combine is creating a new function, `quick_plot`, and call these three functions within `quick_plot`. 
+
+```{r}
+# Density Plot
+density_plot <- function(d)
+{
+  l <- length(d)
+  for (i in 1:(l-1))
+    for (j in (i+1):l)
+  {
+    if (is.numeric(d[[i]])& (!is.numeric(d[[j]])))
+    {
+      print(ggplot(d, aes(x = d[[i]], color = d[[j]]))+ 
+              geom_density()+labs(x = names(d)[i], color = names(d)[j]))
+    }
+  }
+}
+```
+
+```{r}
+# Scatter Plot
+scatter_plot <- function(d)
+{
+  l <- length(d)
+  for (i in 1:(l-1))
+    for (j in (i+1):l)
+  {
+    if (is.numeric(d[[i]])&is.numeric(d[[j]]))
+    {
+      print(ggplot(d, aes(x = d[[i]], y = d[[j]]))+ 
+              geom_point()+
+              labs(x = names(d)[i], y = names(d)[j]))
+    }
+  }
+}
+```
+
+
+```{r}
+# Main Function
+quick_plot <- function(d)
+{
+  l <- length(d)
+  for (i in 1:(l-1))
+    for (j in (i+1):l)
+  {
+      if (!is.numeric(d[[i]])& (!is.numeric(d[[j]])))
+      {
+        bar_plot2(d)
+      }
+      else if (is.numeric(d[[i]])& (!is.numeric(d[[j]])))
+      {
+        density_plot(d)
+      }
+      else if (is.numeric(d[[i]])&is.numeric(d[[j]]))
+      {
+        scatter_plot(d)
+      }
+    }
+}
+```
+
+```{r}
+quick_plot(df_clean)
+```
 
