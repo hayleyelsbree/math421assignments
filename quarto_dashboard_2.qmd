@@ -4,38 +4,59 @@ author: "Hayley Elsbree"
 format: dashboard
 editor: visual
 ---
+
+```{r}
+library(plotly)
+library(tidyverse)
+df <- read_csv("titanic.csv") |> 
+  drop_na(Age, Embarked) |>
+  mutate(Survived = factor(Survived, labels = c("No", "Yes")),
+         Pclass   = factor(Pclass))
+
+survival_pct <- round((mean(df$Survived == "Yes") * 100), 0)
+```
+
+
 # Overview
 
 ## {.sidebar}
 
 This is the sidebar
 
-## Column {width=50%}
+## Column
 
-### Chart 1
+### Row {height=25%}
 
 ```{r}
-
+#| content: valuebox
+#| title: "Passengers"
+list(icon = "people", color = "lightgreen", value = nrow(df))
 ```
 
-## Column {width=50%}
-
-### Chart 2
-
 ```{r}
-
+#| content: valuebox
+#| title: "Survival Rate"
+list(icon = "life-preserver", color = "lightblue", value = paste0(survival_pct, "%"))
 ```
 
-### Chart 3
+### Row {height=75%}
 
 ```{r}
-
+#| title: Survival by class
+p <- ggplot(df, aes(x = Pclass, fill = Survived)) +
+  geom_bar(position = "fill") +
+  labs(y = "Proportion")
+ggplotly(p)
 ```
 
-# About
+# Page 2
 
-### About the Dataset
+# Data
 
 ```{r}
-
+library(DT)
+#| title: Passenger data (type in the search box to filter)
+df |>
+  select(Name, Sex, Age, Pclass, Embarked, Fare, Survived) |>
+  datatable(options = list(pageLength = 10))
 ```
