@@ -1,0 +1,41 @@
+---
+title: "My first dashboard"
+author: "Hayley Elsbree"
+format: dashboard
+editor: visual
+---
+# Overview
+
+## {.sidebar}
+
+This is the sidebar
+
+## Column {width=50%}
+
+### Chart 1
+
+```{r}
+
+```
+
+## Column {width=50%}
+
+### Chart 2
+
+```{r}
+
+```
+
+### Chart 3
+
+```{r}
+
+```
+
+# About
+
+### About the Dataset
+
+```{r}
+
+```

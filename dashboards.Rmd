@@ -1,0 +1,7 @@
+# Quarto Dashboards Assignment
+
+
+
+[Dashboard 1](quarto_dashboard_1.html)
+
+[Dashboard 2](quarto_dashboard_2.html)
