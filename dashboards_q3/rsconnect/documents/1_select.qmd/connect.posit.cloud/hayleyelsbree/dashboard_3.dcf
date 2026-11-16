@@ -1,0 +1,15 @@
+name: dashboard_3
+title: dashboard_3
+username: hayleyelsbree
+account: hayleyelsbree
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 01a1e4b8-bd15-31b3-a667-edeb4082fc70
+bundleId:
+url: https://connect.posit.cloud/hayleyelsbree/content/01a1e4b8-bd15-31b3-a667-edeb4082fc70
+version: 1
+quarto_version: 1.10.18
+quarto_engines: knitr
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: 1_select.html|1_select_files

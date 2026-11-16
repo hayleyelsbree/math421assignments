@@ -1,0 +1,83 @@
+---
+title: "DS Salaries Dashboard"
+format: dashboard
+server: shiny
+---
+
+```{r}
+#| context: setup
+library(shiny)
+library(tidyverse)
+library(plotly)
+library(DT)
+library(lubridate)
+df <- read_csv("ds_salaries.csv") |> mutate(across(where(is.character), as.factor))
+
+# Shown instead of a plot when the inputs leave no rows
+empty_plot <- function() {
+  plotly_empty() |>
+    layout(title = list(text = "No passengers match these inputs.", y = 0.5))
+}
+```
+
+# Plots
+
+## {.sidebar}
+
+Data science salaries have grown significantly in recent years, with wide variation based on experience, location, and role. Use the inputs below to explore salary trends and filter the plots and table on the **Data** page.
+
+```{r}
+checkboxGroupInput("exp", "Experience Level",
+                   choices = c("Entry" = "EN", "Mid" = "MI", "Senior" = "SE", "Executive" = "EX"),
+                   selected = c("EN", "MI", "SE", "EX"))
+```
+
+## Row
+
+```{r}
+#| title: Salary density
+plotlyOutput("p1")
+```
+
+```{r}
+#| title: Salary by company size
+plotlyOutput("p2")
+```
+
+# Data
+
+```{r}
+#| title: Data used in the plots (filtered by the inputs on the Plots page)
+DTOutput("tbl")
+```
+
+```{r}
+#| context: server
+filtered <- reactive({
+  df |>
+    filter(experience_level %in% input$exp)
+})
+
+output$p1 <- renderPlotly({
+  if (nrow(filtered()) == 0) return(empty_plot())
+  p <- ggplot(filtered(), aes(x = salary_in_usd, color = experience_level)) +
+    geom_density() +
+    labs(x = "Salary (USD)", color = "Experience")
+  ggplotly(p)
+})
+
+output$p2 <- renderPlotly({
+  if (nrow(filtered()) == 0) return(empty_plot())
+  p <- ggplot(filtered(), aes(x = company_size, fill = experience_level)) +
+    geom_bar(position = "fill") +
+    labs(y = "Proportion", x = "Company Size", fill = "Experience")
+  ggplotly(p)
+})
+
+output$tbl <- renderDT({
+  filtered() |>
+    select(work_year, job_title, experience_level, salary_in_usd, 
+           company_size, remote_ratio, company_location) |>
+    datatable(options = list(pageLength = 10))
+})
+```
