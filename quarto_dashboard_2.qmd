@@ -6,50 +6,89 @@ editor: visual
 ---
 
 ```{r}
-library(plotly)
 library(tidyverse)
-df <- read_csv("titanic.csv") |> 
+library(plotly)
+library(DT)
+df <- read_csv("https://bryantstats.github.io/math421/data/titanic_final.csv") |>
   drop_na(Age, Embarked) |>
   mutate(Survived = factor(Survived, labels = c("No", "Yes")),
          Pclass   = factor(Pclass))
-
-survival_pct <- round((mean(df$Survived == "Yes") * 100), 0)
 ```
-
 
 # Overview
 
-## {.sidebar}
+##  {.sidebar}
 
-This is the sidebar
+The Titanic disaster of 1912 resulted in the loss of over 1,500 lives. This dashboard analyzes passenger demographics and survival patterns.
+
+Examining 712 passengers with complete records reveals stark differences in survival rates across different groups.
+
+Data: [titanic_final.csv](https://bryantstats.github.io/math421/data/titanic_final.csv)
 
 ## Column
 
-### Row {height=25%}
+### Row {height="25%"}
+
 
 ```{r}
 #| content: valuebox
-#| title: "Passengers"
-list(icon = "people", color = "lightgreen", value = nrow(df))
+#| title: "Total Passengers"
+list(icon = "people", color = "primary", value = nrow(df))
 ```
 
 ```{r}
 #| content: valuebox
-#| title: "Survival Rate"
-list(icon = "life-preserver", color = "lightblue", value = paste0(survival_pct, "%"))
+#| title: "Survivors"
+list(icon = "heart-pulse", color = "success",
+     value = sum(df$Survived == "Yes"))
 ```
 
-### Row {height=75%}
+```{r}
+#| content: valuebox
+#| title: "Average Fare"
+list(icon = "ticket", color = "info", value = scales::dollar(mean(df$Fare), accuracy = 0.01))
+
+```
+
+
+### Row {height="75%"}
 
 ```{r}
-#| title: Survival by class
-p <- ggplot(df, aes(x = Pclass, fill = Survived)) +
-  geom_bar(position = "fill") +
-  labs(y = "Proportion")
+#| title: Age distribution by survival
+p <- ggplot(df, aes(x = Survived, y = Age, fill = Survived)) +
+  geom_boxplot() +
+  labs(x = "Survived", y = "Age (years)")
 ggplotly(p)
 ```
 
-# Page 2
+
+```{r}
+#| title: Passengers by embarkation port
+p <- ggplot(df, aes(x = Embarked, fill = Survived)) +
+  geom_bar() +
+  labs(x = "Port of Embarkation", y = "Count", fill = "Survived")
+ggplotly(p)
+```
+
+# Demographics
+
+## Column {.tabset}
+
+```{r}
+#| title: Fare by Class
+p <- ggplot(df, aes(x = Pclass, y = Fare, fill = Pclass)) +
+  geom_boxplot() +
+  labs(x = "Passenger Class", y = "Fare")
+ggplotly(p)
+```
+
+```{r}
+#| title: Age vs Fare
+p <- ggplot(df, aes(x = Age, y = Fare, color = Survived)) +
+  geom_point(alpha = 0.6) +
+  labs(x = "Age (years)", y = "Fare", color = "Survived")
+ggplotly(p)
+```
 
 # Data
 
