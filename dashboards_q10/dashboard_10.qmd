@@ -1,0 +1,82 @@
+---
+title: "Airline Delays Dashboard"
+format: dashboard
+server: shiny
+---
+
+```{r}
+#| context: setup
+library(shiny)
+library(tidyverse)
+library(plotly)
+library(DT)
+library(lubridate)
+df <- read_csv("airlines.csv") |> mutate(across(where(is.character), as.factor))
+
+# Shown instead of a plot when the inputs leave no rows
+empty_plot <- function() {
+  plotly_empty() |>
+    layout(title = list(text = "No passengers match these inputs.", y = 0.5))
+}
+```
+
+
+# Plots
+
+## {.sidebar}
+
+Data science salaries have grown significantly in recent years, with wide variation based on experience, location, and role. Use the inputs below to explore salary trends and filter the plots and table on the **Data** page.
+
+```{r}
+sliderInput("salary", "Salary (USD)", min = 0, max = 600000, value = c(0, 600000))
+```
+
+## Row
+
+```{r}
+#| title: Remote ratio density
+plotlyOutput("p1")
+```
+
+```{r}
+#| title: Experience level by company size
+plotlyOutput("p2")
+```
+
+# Data
+
+```{r}
+#| title: Data used in the plots (filtered by the inputs on the Plots page)
+DTOutput("tbl")
+```
+
+```{r}
+#| context: server
+filtered <- reactive({
+  df |>
+    filter(salary_in_usd >= input$salary[1], salary_in_usd <= input$salary[2])
+})
+
+output$p1 <- renderPlotly({
+  if (nrow(filtered()) == 0) return(empty_plot())
+  p <- ggplot(filtered(), aes(x = remote_ratio, color = experience_level)) +
+    geom_density() +
+    labs(x = "Remote Ratio (%)", color = "Experience")
+  ggplotly(p)
+})
+
+output$p2 <- renderPlotly({
+  if (nrow(filtered()) == 0) return(empty_plot())
+  p <- ggplot(filtered(), aes(x = company_size, fill = experience_level)) +
+    geom_bar(position = "fill") +
+    labs(y = "Proportion", x = "Company Size", fill = "Experience")
+  ggplotly(p)
+})
+
+output$tbl <- renderDT({
+  filtered() |>
+    select(work_year, job_title, experience_level, salary_in_usd, 
+           company_size, remote_ratio, company_location) |>
+    datatable(options = list(pageLength = 10))
+})
+```

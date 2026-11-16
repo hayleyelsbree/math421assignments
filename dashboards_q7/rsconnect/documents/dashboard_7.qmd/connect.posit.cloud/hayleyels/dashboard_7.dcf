@@ -1,0 +1,15 @@
+name: dashboard_7
+title: dashboard_7
+username: hayleyels
+account: hayleyels
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 01a1e58b-453d-4aee-3522-e605d17c937f
+bundleId:
+url: https://connect.posit.cloud/hayleyels/content/01a1e58b-453d-4aee-3522-e605d17c937f
+version: 1
+quarto_version: 1.10.18
+quarto_engines: knitr
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: dashboard_7.html|dashboard_7_files
