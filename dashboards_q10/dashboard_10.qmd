@@ -1,8 +1,19 @@
 ---
-title: "Airline Delays Dashboard"
-format: dashboard
+title: "US Airline Flight Performance Dashboard"
+format: 
+  dashboard:
+    nav-buttons:
+      - icon: linkedin
+        href: https://www.linkedin.com/in/hayley-elsbree
+      - icon: github
+        href: https://raw.githubusercontent.com/hayleyelsbree/math421assignments/refs/heads/main/dashboards_q10/dashboard_10.qmd
 server: shiny
 ---
+
+```{r, echo=FALSE}
+setwd("C:\\Users\\student\\OneDrive - Bryant University\\Documents\\GitHub\\math421assignments\\dashboards_q10")
+```
+
 
 ```{r}
 #| context: setup
@@ -11,7 +22,7 @@ library(tidyverse)
 library(plotly)
 library(DT)
 library(lubridate)
-df <- read_csv("airlines.csv") |> mutate(across(where(is.character), as.factor))
+df <- read_csv("flight_data_2024.csv") |> mutate(across(where(is.character), as.factor))
 
 # Shown instead of a plot when the inputs leave no rows
 empty_plot <- function() {
@@ -21,62 +32,39 @@ empty_plot <- function() {
 ```
 
 
-# Plots
+# Page 1
 
 ## {.sidebar}
 
-Data science salaries have grown significantly in recent years, with wide variation based on experience, location, and role. Use the inputs below to explore salary trends and filter the plots and table on the **Data** page.
+With the holiday season approaching, airline delays are a major worry amongst travelers in the US. This dashboard analyzes flight delays, cancellations, and on-time performance across major US airports in 2024.
+
+Use the filters below to explore different aspects of airline performance.
+
+Learn more about the dataset and download it: [flight_data_2024.csv](https://www.kaggle.com/datasets/hrishitpatil/flight-data-2024)
+
+## Column
+
+### Row {height = 25%}
 
 ```{r}
-sliderInput("salary", "Salary (USD)", min = 0, max = 600000, value = c(0, 600000))
-```
-
-## Row
-
-```{r}
-#| title: Remote ratio density
-plotlyOutput("p1")
-```
-
-```{r}
-#| title: Experience level by company size
-plotlyOutput("p2")
-```
-
-# Data
-
-```{r}
-#| title: Data used in the plots (filtered by the inputs on the Plots page)
-DTOutput("tbl")
+#| content: valuebox
+#| title: Total Flights
+list(icon = "airplane", color = "primary", value = format(nrow(df), big.mark = ",", scientific = FALSE))
 ```
 
 ```{r}
-#| context: server
-filtered <- reactive({
-  df |>
-    filter(salary_in_usd >= input$salary[1], salary_in_usd <= input$salary[2])
-})
-
-output$p1 <- renderPlotly({
-  if (nrow(filtered()) == 0) return(empty_plot())
-  p <- ggplot(filtered(), aes(x = remote_ratio, color = experience_level)) +
-    geom_density() +
-    labs(x = "Remote Ratio (%)", color = "Experience")
-  ggplotly(p)
-})
-
-output$p2 <- renderPlotly({
-  if (nrow(filtered()) == 0) return(empty_plot())
-  p <- ggplot(filtered(), aes(x = company_size, fill = experience_level)) +
-    geom_bar(position = "fill") +
-    labs(y = "Proportion", x = "Company Size", fill = "Experience")
-  ggplotly(p)
-})
-
-output$tbl <- renderDT({
-  filtered() |>
-    select(work_year, job_title, experience_level, salary_in_usd, 
-           company_size, remote_ratio, company_location) |>
-    datatable(options = list(pageLength = 10))
-})
+#| content: valuebox
+# #| title: Total Flights
+# list(icon = "airplane", color = "primary", value = nrow(df))
 ```
+
+```{r}
+#| content: valuebox
+# #| title: Total Flights
+# list(icon = "airplane", color = "primary", value = nrow(df))
+```
+
+
+# Page 2
+
+# Page 3
