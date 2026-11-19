@@ -7,8 +7,6 @@ format:
         href: https://www.linkedin.com/in/hayley-elsbree
       - icon: github
         href: https://raw.githubusercontent.com/hayleyelsbree/math421assignments/refs/heads/main/dashboards_q10/dashboard_10.qmd
-resources:
-  - airplane.jpg
 server: shiny
 ---
 
@@ -159,7 +157,7 @@ plotlyOutput("p2")
 
 ```{r}
 # Filter by Airline
-checkboxGroupInput("carriers", "Airlines",
+checkboxGroupInput("carriers2", "Airlines",
                    choices = c("Endeavor Air",
                                "American Airlines",
                                "Alaska Airlines",
@@ -196,7 +194,12 @@ checkboxGroupInput("carriers", "Airlines",
 
 ```{r}
 #| title: Arrival Delay
-plotlyOutput("p3")
+p <- ggplot(small_df, aes(x = arr_delay)) +
+     geom_histogram(bins = 40, fill = "pink") + 
+     labs(title = "Distribution of Arrival Delays",
+          x = "Arrival Delay (Minutes)",
+          y = "Number of Flights")
+ggplotly(p)
 ```
 
 
@@ -242,7 +245,7 @@ filtered <- reactive({
 output$p1 <- renderPlotly({
   if (nrow(filtered()) == 0) return(empty_plot())
   p <- ggplot(filtered(), aes(x = month(fl_date, label = TRUE))) +
-    geom_bar(na.rm = TRUE) + 
+    geom_bar(na.rm = TRUE, fill = "lightblue") + 
     labs(title = "Number of Flights by Month", 
          x = "Month",
          y = "Number of Flights")
@@ -251,12 +254,12 @@ output$p1 <- renderPlotly({
 
 output$p2 <- renderPlotly({
   data <- filtered() |>
-    filter(!is.na(.data[[input$delay_type]]))
+    filter(!is.na(.data[[input$delay_type]]) & carrier %in% input$carriers)
   if (nrow(data) == 0) return(empty_plot())
   p <- ggplot(
     data,
-    aes(x = carrier, y = .data[[input$delay_type]])) +
-    geom_bar(stat = "summary", fun = "mean", na.rm = TRUE) +
+    aes(x = op_unique_carrier, y = .data[[input$delay_type]])) +
+    geom_bar(stat = "summary", fun = "mean", na.rm = TRUE, fill = "lightgreen") +
     labs(
       title = "Average Delay by Airline",
       x = "Airline",
@@ -265,29 +268,9 @@ output$p2 <- renderPlotly({
   ggplotly(p)
 })
 
-output$p3 <- renderPlotly({
-
-  filtered_df <- small_df |>
-    filter(carrier %in% input$carriers)
-
-  p3 <- filtered_df |>
-    group_by(month, carrier) |>
-    summarize(avg_delay = mean(arr_delay, na.rm = TRUE))
-
-  p <- ggplot(p3, aes(x = month(fl_date, label = TRUE), y = avg_delay, color = carrier)) +
-       geom_line() +
-       geom_point() +
-       labs(title = "Average Arrival Delay by Month",
-            x = "Month",
-            y = "Average Arrival Delay (Minutes)",
-            color = "Carrier")
-
-  ggplotly(p)
-})
-
 output$p4 <- renderPlotly({
   filtered_df <- small_df |>
-    filter(carrier %in% input$carriers)
+    filter(carrier %in% input$carriers2)
 
   delay_causes <- data.frame(
     cause = c("Carrier", "Weather", "NAS", "Security", "Late Aircraft"),
@@ -346,7 +329,7 @@ output$tbl <- renderDT({
 
 ::: {.card title="About this dashboard"}
 
-![](airplane.jpg)
+![](images/airplane.jpg){width=50%}
 
 This dashboard was built with Quarto. The **Overview** page shows the main numbers, **Flight Analysis** analyzes different patterns in flight delays, and **Data** lets you search the flight list.
 
