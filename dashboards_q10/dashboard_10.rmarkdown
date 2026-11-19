@@ -1,0 +1,359 @@
+---
+title: "US Airline Flight Performance Dashboard"
+format: 
+  dashboard:
+    nav-buttons:
+      - icon: linkedin
+        href: https://www.linkedin.com/in/hayley-elsbree
+      - icon: github
+        href: https://raw.githubusercontent.com/hayleyelsbree/math421assignments/refs/heads/main/dashboards_q10/dashboard_10.qmd
+resources:
+  - airplane.jpg
+server: shiny
+---
+
+```{r, echo=FALSE}
+setwd("C:\\Users\\student\\OneDrive - Bryant University\\Documents\\GitHub\\math421assignments\\dashboards_q10")
+```
+
+
+```{r}
+#| context: setup
+library(shiny)
+library(tidyverse)
+library(plotly)
+library(DT)
+library(lubridate)
+df <- read_csv("flight_data_2024.csv") |> mutate(fl_date = ymd(fl_date), across(where(is.character), as.factor))
+df$carrier <- case_when(df$op_unique_carrier == "9E" ~ "Endeavor Air",
+                       df$op_unique_carrier == "AA" ~ "American Airlines",
+                       df$op_unique_carrier == "AS" ~ "Alaska Airlines",
+                       df$op_unique_carrier == "B6" ~ "JetBlue Airways",
+                       df$op_unique_carrier == "DL" ~ "Delta Air Lines",
+                       df$op_unique_carrier == "F9" ~ "Frontier Airlines",
+                       df$op_unique_carrier == "G4" ~ "Allegiant Air",
+                       df$op_unique_carrier == "HA" ~ "Hawaiian Airlines",
+                       df$op_unique_carrier == "MQ" ~ "Envoy Air",
+                       df$op_unique_carrier == "NK" ~ "Spirit Airlines",
+                       df$op_unique_carrier == "OH" ~ "PSA Airlines",
+                       df$op_unique_carrier == "OO" ~ "SkyWest Airlines",
+                       df$op_unique_carrier == "UA" ~ "United Airlines",
+                       df$op_unique_carrier == "WN" ~ "Southwest Airlines",
+                       df$op_unique_carrier == "YX" ~ "Republic Airways")
+
+set.seed(42)
+small_df <- df |> slice_sample(prop = 0.01)
+
+# Shown instead of a plot when the inputs leave no rows
+empty_plot <- function() {
+  plotly_empty() |>
+    layout(title = list(text = "No flights match these inputs.", y = 0.5))
+}
+```
+
+
+# Overview
+
+## {.sidebar}
+
+With the holiday season approaching, airline delays are a major worry amongst travelers in the US. This dashboard analyzes flight delays, cancellations, and on-time performance across major US airports in 2024.
+
+Use the filters below to explore different aspects of airline performance.
+
+Learn more about the dataset on Kaggle: [flight_data_2024](https://www.kaggle.com/datasets/hrishitpatil/flight-data-2024)
+
+```{r}
+# Delay
+selectInput("delay_type", "Delay Measure",
+            choices = c(
+              "Departure Delay" = "dep_delay",
+              "Arrival Delay" = "arr_delay",
+              "Carrier Delay" = "carrier_delay",
+              "Weather Delay" = "weather_delay",
+              "NAS Delay" = "nas_delay",
+              "Late Aircraft Delay" = "late_aircraft_delay"
+            ))
+
+# Filter by Airline
+checkboxGroupInput("carriers", "Airlines",
+                   choices = c("Endeavor Air",
+                               "American Airlines",
+                               "Alaska Airlines",
+                               "JetBlue Airways",
+                               "Delta Air Lines",
+                               "Frontier Airlines",
+                               "Allegiant Air",
+                               "Hawaiian Airlines",
+                               "Envoy Air",
+                               "Spirit Airlines",
+                               "PSA Airlines",
+                               "SkyWest Airlines",
+                               "United Airlines",
+                               "Southwest Airlines",
+                               "Republic Airways"),
+                   selected = c("Endeavor Air",
+                               "American Airlines",
+                               "Alaska Airlines",
+                               "JetBlue Airways",
+                               "Delta Air Lines",
+                               "Frontier Airlines",
+                               "Allegiant Air",
+                               "Hawaiian Airlines",
+                               "Envoy Air",
+                               "Spirit Airlines",
+                               "PSA Airlines",
+                               "SkyWest Airlines",
+                               "United Airlines",
+                               "Southwest Airlines",
+                               "Republic Airways"))
+
+# Flight Distance
+sliderInput("distance", "Flight Distance (Miles)",min = min(df$distance, na.rm = TRUE), max = max(df$distance, na.rm = TRUE),
+            value = c(min(df$distance, na.rm = TRUE), max(df$distance, na.rm = TRUE)))
+
+# Cancelled vs Not Cancelled
+radioButtons("cancelled", "Cancellation Status",
+                   choices = c("All Flights" = "all",
+                               "Cancelled Only" = "1",
+                               "Not Cancelled" = "0"))
+
+# Date Range
+dateRangeInput("dates", "Date Range",
+               start = min(df$fl_date), end = max(df$fl_date),
+               min = min(df$fl_date), max = max(df$fl_date))
+```
+
+
+## Column
+
+### Row {height = 10%}
+
+```{r}
+#| content: valuebox
+#| title: Total Flights
+list(icon = "airplane", color = "primary", value = format(nrow(df), big.mark = ",", scientific = FALSE))
+```
+
+```{r}
+#| content: valuebox
+#| title: Total Cancellations
+list(icon = "x-circle", color = "danger", value = format(sum(df$cancelled, na.rm = TRUE), big.mark = ",", scientific = FALSE))
+```
+
+
+### Row {height = 90%}
+
+```{r}
+#| title: Flights per Month
+plotlyOutput("p1")
+```
+
+
+```{r}
+#| title: Average Delay by Airline
+plotlyOutput("p2")
+```
+
+
+# Flight Analysis
+
+## {.sidebar}
+
+```{r}
+# Filter by Airline
+checkboxGroupInput("carriers", "Airlines",
+                   choices = c("Endeavor Air",
+                               "American Airlines",
+                               "Alaska Airlines",
+                               "JetBlue Airways",
+                               "Delta Air Lines",
+                               "Frontier Airlines",
+                               "Allegiant Air",
+                               "Hawaiian Airlines",
+                               "Envoy Air",
+                               "Spirit Airlines",
+                               "PSA Airlines",
+                               "SkyWest Airlines",
+                               "United Airlines",
+                               "Southwest Airlines",
+                               "Republic Airways"),
+                   selected = c("Endeavor Air",
+                               "American Airlines",
+                               "Alaska Airlines",
+                               "JetBlue Airways",
+                               "Delta Air Lines",
+                               "Frontier Airlines",
+                               "Allegiant Air",
+                               "Hawaiian Airlines",
+                               "Envoy Air",
+                               "Spirit Airlines",
+                               "PSA Airlines",
+                               "SkyWest Airlines",
+                               "United Airlines",
+                               "Southwest Airlines",
+                               "Republic Airways"))
+```
+
+## Column {.tabset}
+
+```{r}
+#| title: Arrival Delay
+plotlyOutput("p3")
+```
+
+
+```{r}
+#| title: Delay Analysis
+plotlyOutput("p4")
+```
+
+
+```{r}
+#| title: Air Time and Arrival Delay
+plotlyOutput("p5")
+```
+
+
+# Data
+
+```{r}
+#| title: Data used in the plots (filtered by the inputs on the Plots page)
+DTOutput("tbl")
+```
+
+```{r}
+#| context: server
+filtered <- reactive({
+  data <- small_df |>
+    filter(
+      carrier %in% input$carriers,
+      distance >= input$distance[1],
+      distance <= input$distance[2],
+      fl_date >= input$dates[1],
+      fl_date <= input$dates[2]
+    )
+
+  # Apply cancellation filter only if a specific option is selected
+  if (input$cancelled != "all") {
+    data <- data |>
+      filter(cancelled == as.numeric(input$cancelled))
+  }
+  data
+})
+
+output$p1 <- renderPlotly({
+  if (nrow(filtered()) == 0) return(empty_plot())
+  p <- ggplot(filtered(), aes(x = month(fl_date, label = TRUE))) +
+    geom_bar(na.rm = TRUE) + 
+    labs(title = "Number of Flights by Month", 
+         x = "Month",
+         y = "Number of Flights")
+  ggplotly(p)
+})
+
+output$p2 <- renderPlotly({
+  data <- filtered() |>
+    filter(!is.na(.data[[input$delay_type]]))
+  if (nrow(data) == 0) return(empty_plot())
+  p <- ggplot(
+    data,
+    aes(x = carrier, y = .data[[input$delay_type]])) +
+    geom_bar(stat = "summary", fun = "mean", na.rm = TRUE) +
+    labs(
+      title = "Average Delay by Airline",
+      x = "Airline",
+      y = "Average Delay (Minutes)"
+    )
+  ggplotly(p)
+})
+
+output$p3 <- renderPlotly({
+
+  filtered_df <- small_df |>
+    filter(carrier %in% input$carriers)
+
+  p3 <- filtered_df |>
+    group_by(month, carrier) |>
+    summarize(avg_delay = mean(arr_delay, na.rm = TRUE))
+
+  p <- ggplot(p3, aes(x = month(fl_date, label = TRUE), y = avg_delay, color = carrier)) +
+       geom_line() +
+       geom_point() +
+       labs(title = "Average Arrival Delay by Month",
+            x = "Month",
+            y = "Average Arrival Delay (Minutes)",
+            color = "Carrier")
+
+  ggplotly(p)
+})
+
+output$p4 <- renderPlotly({
+  filtered_df <- small_df |>
+    filter(carrier %in% input$carriers)
+
+  delay_causes <- data.frame(
+    cause = c("Carrier", "Weather", "NAS", "Security", "Late Aircraft"),
+    minutes = c(
+      sum(filtered_df$carrier_delay, na.rm = TRUE),
+      sum(filtered_df$weather_delay, na.rm = TRUE),
+      sum(filtered_df$nas_delay, na.rm = TRUE),
+      sum(filtered_df$security_delay, na.rm = TRUE),
+      sum(filtered_df$late_aircraft_delay, na.rm = TRUE)
+    ),
+    carrier = small_df$carrier
+  )
+
+  p <- ggplot(delay_causes, aes(x = cause, y = minutes, color = carrier)) +
+    geom_bar(stat = "identity") +
+    labs(title = "Breakdown of Delay Causes",
+         x = "Delay Cause",
+         y = "Total Delay Minutes",
+         color = "Carrier")
+  
+  ggplotly(p)
+})
+
+output$p5 <- renderPlotly({
+
+  data <- filtered() |>
+    filter(!is.na(air_time), !is.na(arr_delay))
+
+  if (nrow(data) == 0) return(empty_plot())
+
+  scatter_df <- data |>
+    slice_sample(n = min(3000, nrow(data)))
+
+  p <- ggplot(scatter_df, aes(x = air_time, y = arr_delay, color = carrier)) +
+    geom_point() +
+    geom_smooth(
+      method = "lm",
+      se = TRUE,
+      color = "darkred") +
+    labs(title = "Air Time vs. Arrival Delay by Carrier",
+         x = "Air Time (Minutes)",
+         y = "Arrival Delay (Minutes)",
+         color = "Carrier")
+  ggplotly(p)
+})
+
+
+output$tbl <- renderDT({
+  filtered() |>
+    select(fl_date, carrier, origin, origin_city_name, dest, dest_city_name, dep_delay, arr_delay, cancelled, air_time, distance, carrier_delay, weather_delay, nas_delay, security_delay, late_aircraft_delay) |>
+    datatable(options = list(pageLength = 10))
+})
+```
+
+# About
+
+::: {.card title="About this dashboard"}
+
+![](airplane.jpg)
+
+This dashboard was built with Quarto. The **Overview** page shows the main numbers, **Flight Analysis** analyzes different patterns in flight delays, and **Data** lets you search the flight list.
+
+In this dataset, there are over 7 million flights from 2024. July had the most total flights, whereas January had the most cancelled flights. We can also see that American Airlines has the highest departure delay. Late Aircraft is responsible for the most delay minutes, which makes sense because if the aircraft is late, it is likely to be the cause of a delay. There is a slight trend with air time versus arrival delay, where an increase in air time tends to lead to a higher arrival delay. 
+
+The biggest challenge with this dashboard was the size of the data. Since the dataset has over 7 million records, it would be too computationally expensive to run the analyses on all the data. To combat this issue, I used a sample of 1% of the data, which is still 70,000 records. I also had to use an even smaller subset for the scatterplot because 70,000 records were too many and caused some rendering lag. 
+
+:::
