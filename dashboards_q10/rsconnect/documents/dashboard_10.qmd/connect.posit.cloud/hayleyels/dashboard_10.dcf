@@ -12,4 +12,4 @@ quarto_version: 1.10.18
 quarto_engines: knitr
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: airlines.csv|dashboard_10.html|flight_data_2024.csv|dashboard_10_files
+ignoredFiles: airlines.csv|dashboard_10.html|flight_data_2024.csv
