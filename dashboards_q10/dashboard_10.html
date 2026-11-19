@@ -99,7 +99,7 @@ grid-auto-rows: minmax(0, 1fr);">
 Total Flights
 </p>
 <p class="value-box-value">
-7,079,081
+70,790
 </p>
 </div>
 </div>
@@ -115,7 +115,7 @@ Total Flights
 Total Cancellations
 </p>
 <p class="value-box-value">
-96,315
+943
 </p>
 </div>
 </div>
@@ -274,7 +274,7 @@ Average Delay by Airline
 <div class="cell-output-display">
 <div class="form-group shiny-input-container no-baseline">
 <label class="control-label" id="distance-label" for="distance">Flight Distance (Miles)</label>
-<input class="js-range-slider" id="distance" data-skin="shiny" data-type="double" data-min="11" data-max="5095" data-from="11" data-to="5095" data-step="1" data-grid="true" data-grid-num="9.98821218074656" data-grid-snap="false" data-prettify-separator="," data-prettify-enabled="true" data-keyboard="true" data-drag-interval="true" data-data-type="number">
+<input class="js-range-slider" id="distance" data-skin="shiny" data-type="double" data-min="31" data-max="5095" data-from="31" data-to="5095" data-step="1" data-grid="true" data-grid-num="9.98816568047337" data-grid-snap="false" data-prettify-separator="," data-prettify-enabled="true" data-keyboard="true" data-drag-interval="true" data-data-type="number">
 </div>
 </div>
 <div class="cell-output-display">
@@ -514,7 +514,7 @@ library(tidyverse)
 library(plotly)
 library(DT)
 library(lubridate)
-df <- read_csv("flight_data_2024.csv") |> mutate(fl_date = ymd(fl_date), across(where(is.character), as.factor))
+df <- read_csv("flight_data_2024_sample.csv") |> mutate(fl_date = ymd(fl_date), across(where(is.character), as.factor))
 df$carrier <- case_when(df$op_unique_carrier == "9E" ~ "Endeavor Air",
                        df$op_unique_carrier == "AA" ~ "American Airlines",
                        df$op_unique_carrier == "AS" ~ "Alaska Airlines",
@@ -531,9 +531,7 @@ df$carrier <- case_when(df$op_unique_carrier == "9E" ~ "Endeavor Air",
                        df$op_unique_carrier == "WN" ~ "Southwest Airlines",
                        df$op_unique_carrier == "YX" ~ "Republic Airways")
 
-set.seed(42)
-small_df <- df |> slice_sample(prop = 0.01)
-
+small_df <- df
 # Shown instead of a plot when the inputs leave no rows
 empty_plot <- function() {
   plotly_empty() |>

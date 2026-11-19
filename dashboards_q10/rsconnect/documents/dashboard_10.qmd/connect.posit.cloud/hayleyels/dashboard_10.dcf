@@ -6,7 +6,7 @@ server: connect.posit.cloud
 hostUrl: https://api.connect.posit.cloud/v1
 appId: 01a1f4f0-0cb6-aebb-0548-6570a4c49ccb
 bundleId:
-url:
+url: https://connect.posit.cloud/hayleyels/content/01a1f4f0-0cb6-aebb-0548-6570a4c49ccb
 version: 1
 quarto_version: 1.10.18
 quarto_engines: knitr

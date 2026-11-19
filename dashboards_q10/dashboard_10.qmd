@@ -13,7 +13,7 @@ server: shiny
 ---
 
 ```{r, echo=FALSE}
-setwd("C:\\Users\\student\\OneDrive - Bryant University\\Documents\\GitHub\\math421assignments\\dashboards_q10")
+# setwd("C:\\Users\\student\\OneDrive - Bryant University\\Documents\\GitHub\\math421assignments\\dashboards_q10")
 ```
 
 
@@ -24,7 +24,7 @@ library(tidyverse)
 library(plotly)
 library(DT)
 library(lubridate)
-df <- read_csv("flight_data_2024.csv") |> mutate(fl_date = ymd(fl_date), across(where(is.character), as.factor))
+df <- read_csv("C:\\Users\\student\\OneDrive - Bryant University\\Documents\\GitHub\\math421assignments\\dashboards_q10\\flight_data_2024_sample.csv") |> mutate(fl_date = ymd(fl_date), across(where(is.character), as.factor))
 df$carrier <- case_when(df$op_unique_carrier == "9E" ~ "Endeavor Air",
                        df$op_unique_carrier == "AA" ~ "American Airlines",
                        df$op_unique_carrier == "AS" ~ "Alaska Airlines",
@@ -41,9 +41,7 @@ df$carrier <- case_when(df$op_unique_carrier == "9E" ~ "Endeavor Air",
                        df$op_unique_carrier == "WN" ~ "Southwest Airlines",
                        df$op_unique_carrier == "YX" ~ "Republic Airways")
 
-set.seed(42)
-small_df <- df |> slice_sample(prop = 0.01)
-
+small_df <- df
 # Shown instead of a plot when the inputs leave no rows
 empty_plot <- function() {
   plotly_empty() |>
@@ -348,7 +346,7 @@ output$tbl <- renderDT({
 
 ::: {.card title="About this dashboard"}
 
-![](airplane.jpg)
+![](C:\\Users\\student\\OneDrive - Bryant University\\Documents\\GitHub\\math421assignments\\dashboards_q10\\airplane.jpg)
 
 This dashboard was built with Quarto. The **Overview** page shows the main numbers, **Flight Analysis** analyzes different patterns in flight delays, and **Data** lets you search the flight list.
 
