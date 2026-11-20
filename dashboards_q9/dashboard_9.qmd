@@ -1,0 +1,99 @@
+---
+title: "Data Scientist Salaries Dashboard"
+format: dashboard
+server: shiny
+---
+
+
+```{r}
+#| context: setup
+library(shiny)
+library(tidyverse)
+library(plotly)
+library(DT)
+library(lubridate)
+df <- read_csv("ds_salaries.csv") |> mutate(across(where(is.character), as.factor))
+
+# Shown instead of a plot when the inputs leave no rows
+empty_plot <- function() {
+  plotly_empty() |>
+    layout(title = list(text = "No flights match these inputs.", y = 0.5))
+}
+```
+
+```{r}
+head(df)
+```
+
+# Plots
+
+## {.sidebar}
+
+Data science salaries have grown significantly in recent years, with wide variation based on experience, location, and role. Use the inputs below to explore salary trends and filter the plots and table on the **Data** page.
+
+```{r}
+# Inputs
+
+
+dateRangeInput("dates", "Date Range",
+               start = min(small_df$fl_date), end = max(small_df$fl_date),
+               min = min(small_df$fl_date), max = max(small_df$fl_date))
+```
+
+## Row
+
+```{r}
+#| title: Diversions by Carrier
+plotlyOutput("p1")
+```
+
+```{r}
+#| title: Arrival Delay by Carrier
+plotlyOutput("p2")
+```
+
+# Data
+
+```{r}
+#| title: Data used in the plots (filtered by the inputs on the Plots page)
+DTOutput("tbl")
+```
+
+```{r}
+#| context: server
+filtered <- reactive({
+  small_df |>
+    filter(fl_date >= input$dates[1], fl_date <= input$dates[2])
+})
+
+output$p1 <- renderPlotly({
+  if (nrow(filtered()) == 0) return(empty_plot())
+  p <- ggplot(
+    filtered() |> filter(diverted == 1),
+    aes(x = op_unique_carrier)) +
+    geom_bar(fill = "steelblue") +
+    labs(
+      x = "Carrier",
+      y = "Number of Diversions",
+      title = "Flight Diversions by Carrier")
+  ggplotly(p)
+})
+
+output$p2 <- renderPlotly({
+  if (nrow(filtered()) == 0) return(empty_plot())
+  p <- ggplot(
+    filtered() |> filter(!is.na(arr_delay)),
+    aes(x = op_unique_carrier, y = arr_delay)
+  ) +
+    geom_boxplot(fill = "lightblue") +
+    labs(x = "Airline",
+         y = "Arrival Delay (minutes)",
+         title = "Arrival Delay by Carrier") 
+  ggplotly(p)
+})
+
+output$tbl <- renderDT({
+  filtered() |>
+  datatable(options = list(pageLength = 10))
+})
+```

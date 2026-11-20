@@ -15,10 +15,8 @@
 
 [Dashboard 7](https://connect.posit.cloud/hayleyels/content/01a1e58b-453d-4aee-3522-e605d17c937f)
 
-[Dashboard 8]()
+[Dashboard 8](https://connect.posit.cloud/hayleyels/content/01a1f5b2-fe13-813b-59fe-f5ad9f23010f?utm_source=rsconnect-rstudio)
 
 [Dashboard 9]()
 
-[Dashboard 10]()
-
-[Dashboard 10 Presentation]()
+[Dashboard 10](https://connect.posit.cloud/hayleyels/content/01a1f4f0-0cb6-aebb-0548-6570a4c49ccb?utm_source=rsconnect-rstudio)

@@ -1,3 +1,10 @@
+---
+title: "US Airline Flight Performance Dashboard"
+format: dashboard
+server: shiny
+---
+
+
 ```{r}
 #| context: setup
 library(shiny)
@@ -5,14 +12,28 @@ library(tidyverse)
 library(plotly)
 library(DT)
 library(lubridate)
-df <- read_csv("https://bryantstats.github.io/math421/data/titanic_final.csv") |>
-  drop_na(Age, Embarked) |>
-  mutate(date = mdy(date), Survived = factor(Survived, labels = c("No", "Yes")), Pclass = factor(Pclass))
+df <- read_csv("flight_data_2024_sample.csv") |> mutate(fl_date = ymd(fl_date), across(where(is.character), as.factor))
+df$carrier <- case_when(df$op_unique_carrier == "9E" ~ "Endeavor Air",
+                       df$op_unique_carrier == "AA" ~ "American Airlines",
+                       df$op_unique_carrier == "AS" ~ "Alaska Airlines",
+                       df$op_unique_carrier == "B6" ~ "JetBlue Airways",
+                       df$op_unique_carrier == "DL" ~ "Delta Air Lines",
+                       df$op_unique_carrier == "F9" ~ "Frontier Airlines",
+                       df$op_unique_carrier == "G4" ~ "Allegiant Air",
+                       df$op_unique_carrier == "HA" ~ "Hawaiian Airlines",
+                       df$op_unique_carrier == "MQ" ~ "Envoy Air",
+                       df$op_unique_carrier == "NK" ~ "Spirit Airlines",
+                       df$op_unique_carrier == "OH" ~ "PSA Airlines",
+                       df$op_unique_carrier == "OO" ~ "SkyWest Airlines",
+                       df$op_unique_carrier == "UA" ~ "United Airlines",
+                       df$op_unique_carrier == "WN" ~ "Southwest Airlines",
+                       df$op_unique_carrier == "YX" ~ "Republic Airways")
 
+small_df <- df
 # Shown instead of a plot when the inputs leave no rows
 empty_plot <- function() {
   plotly_empty() |>
-    layout(title = list(text = "No passengers match these inputs.", y = 0.5))
+    layout(title = list(text = "No flights match these inputs.", y = 0.5))
 }
 ```
 
@@ -20,25 +41,24 @@ empty_plot <- function() {
 
 ## {.sidebar}
 
-The sinking of the Titanic is one of the most infamous shipwrecks in history. Some groups of people were more likely to survive than others. Use the input below to change the plots here and the table on the **Data** page.
+Flight delays and cancellations are a major worry among travelers, especially during the holiday season. This dashboards explores seasonality trends with flight cancellations and delays. Use the input below to change the plots here and the table on the **Data** page.
 
-The dates in this data are made up for practice; they are not real.
 
 ```{r}
-dateRangeInput("dates", "Date range",
-               start = min(df$date), end = max(df$date),
-               min = min(df$date), max = max(df$date))
+dateRangeInput("dates", "Date Range",
+               start = min(small_df$fl_date), end = max(small_df$fl_date),
+               min = min(small_df$fl_date), max = max(small_df$fl_date))
 ```
 
 ## Row
 
 ```{r}
-#| title: Age density
+#| title: Diversions by Carrier
 plotlyOutput("p1")
 ```
 
 ```{r}
-#| title: Survival by class
+#| title: Arrival Delay by Carrier
 plotlyOutput("p2")
 ```
 
@@ -52,28 +72,39 @@ DTOutput("tbl")
 ```{r}
 #| context: server
 filtered <- reactive({
-  df |>
-    filter(date >= input$dates[1], date <= input$dates[2])
+  small_df |>
+    filter(fl_date >= input$dates[1], fl_date <= input$dates[2])
 })
 
 output$p1 <- renderPlotly({
   if (nrow(filtered()) == 0) return(empty_plot())
-  p <- ggplot(filtered(), aes(x = Age, color = Survived)) +
-    geom_density()
+  p <- ggplot(
+    filtered() |> filter(diverted == 1),
+    aes(x = op_unique_carrier)) +
+    geom_bar(fill = "steelblue") +
+    labs(
+      x = "Carrier",
+      y = "Number of Diversions",
+      title = "Flight Diversions by Carrier")
   ggplotly(p)
 })
 
 output$p2 <- renderPlotly({
   if (nrow(filtered()) == 0) return(empty_plot())
-  p <- ggplot(filtered(), aes(x = Pclass, fill = Survived)) +
-    geom_bar(position = "fill") +
-    labs(y = "Proportion")
+  p <- ggplot(
+    filtered() |> filter(!is.na(arr_delay)),
+    aes(x = op_unique_carrier, y = arr_delay)
+  ) +
+    geom_boxplot(fill = "lightblue") +
+    labs(x = "Airline",
+         y = "Arrival Delay (minutes)",
+         title = "Arrival Delay by Carrier") 
   ggplotly(p)
 })
 
 output$tbl <- renderDT({
   filtered() |>
-    select(date, Name, Sex, Age, Pclass, Embarked, Survived) |>
+    select(fl_date, carrier, origin, origin_city_name, dest, dest_city_name, dep_delay, arr_delay, cancelled, air_time, distance, carrier_delay, weather_delay, nas_delay, security_delay, late_aircraft_delay) |>
     datatable(options = list(pageLength = 10))
 })
 ```
